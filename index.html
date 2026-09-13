@@ -398,12 +398,12 @@ import {
       Auth + Firestore rules, not by hiding this config.
    ========================================================= */
 const firebaseConfig = {
-  apiKey: "AIzaSyBMpirq3Cdrg8EQ45yb2BlJ4U4Xrt32k8c",
-  authDomain: "free-chat-interface.firebaseapp.com",
-  projectId: "free-chat-interface",
-  storageBucket: "free-chat-interface.firebasestorage.app",
-  messagingSenderId: "913944928105",
-  appId: "1:913944928105:web:05f7aa0557e30668e867f8"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
 const EMAIL_SUFFIX = "@wire.local"; // fake email domain so usernames work with Firebase Auth
@@ -464,7 +464,13 @@ onAuthStateChanged(auth, async (user) => {
     meLabel.textContent = 'Signed in as ' + currentUsername;
     loginScreen.style.display = 'none';
     appScreen.classList.add('visible');
-    await setDoc(doc(db, 'users', currentUid), { username: currentUsername }, { merge: true });
+    try {
+      await setDoc(doc(db, 'users', currentUid), { username: currentUsername }, { merge: true });
+    } catch (err) {
+      console.error('Could not refresh user profile doc:', err);
+      // Non-fatal: continue anyway, since the admin script already created
+      // this doc when the account was made.
+    }
     watchUserList();
     openRoom({ type: 'everyone', id: 'everyone', label: 'Everyone' });
   } else {
