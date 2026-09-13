@@ -2,24 +2,53 @@
 // It's how you create the username/password pairs you hand out. Visitors
 // never see this file and can never create their own accounts.
 //
-// Setup (one-time):
-//   1. npm install firebase-admin
-//   2. Firebase Console → Project settings → Service accounts →
-//      "Generate new private key" → save the JSON as serviceAccountKey.json
-//      in this same folder. NEVER commit this file to GitHub — add it to
-//      .gitignore. It grants full admin access to your Firebase project.
+// CREDENTIAL SETUP — pick ONE of the two options below.
 //
-// Usage:
+// Option A (recommended in Codespaces): encrypted secret, no file on disk
+//   1. Firebase Console → Project settings → Service accounts →
+//      "Generate new private key" → a .json file downloads.
+//   2. GitHub → your avatar → Settings → Codespaces → "Secrets" (this is
+//      YOUR account settings, not the repo) → New secret.
+//      Name it exactly: FIREBASE_SERVICE_ACCOUNT_JSON
+//      Value: open the downloaded .json in a text editor, copy the ENTIRE
+//      contents, paste as the secret value.
+//      Under "Repository access," select this repo.
+//   3. Stop and restart the Codespace (secrets only load on (re)start) so
+//      it's injected as an environment variable — nothing is ever written
+//      to disk as a plain file, so there's no file to accidentally leave
+//      behind, commit, or forget to delete.
+//
+// Option B (local machine only, not recommended in Codespaces):
+//   Save the downloaded key as serviceAccountKey.json in this same folder.
+//   Never commit it — it's already in .gitignore.
+//
+// Either way: npm install, then:
 //   node create-user.js add alice "correct horse battery staple"
 //   node create-user.js list
 //   node create-user.js remove alice
 
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 
-const serviceAccount = JSON.parse(readFileSync(new URL('./serviceAccountKey.json', import.meta.url)));
+function loadCredential() {
+  if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+    return JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+  }
+  const filePath = new URL('./serviceAccountKey.json', import.meta.url);
+  if (existsSync(filePath)) {
+    return JSON.parse(readFileSync(filePath));
+  }
+  console.error(
+    'No credential found. Either set the FIREBASE_SERVICE_ACCOUNT_JSON ' +
+    'Codespaces secret (recommended) or place serviceAccountKey.json next ' +
+    'to this script. See the comment block at the top of this file.'
+  );
+  process.exit(1);
+}
+
+const serviceAccount = loadCredential();
 initializeApp({ credential: cert(serviceAccount) });
 
 const auth = getAuth();
@@ -31,7 +60,7 @@ const [, , cmd, username, password] = process.argv;
 async function addUser(username, password) {
   const uname = username.trim().toLowerCase();
   if (!password || password.length < 8) {
-    console.error('Pick a password with at least 8 characters. Please keep it secret and do not commit it to GitHub. You can always change it later in the Firebase Console.');
+    console.error('Pick a password with at least 8 characters.');
     process.exit(1);
   }
   const user = await auth.createUser({
