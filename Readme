@@ -1,0 +1,69 @@
+# Wire
+
+A single static `index.html` you host on GitHub Pages. Visitors never create
+an account — you create a username/password for each person ahead of time
+and tell it to them yourself. Once logged in, anyone can post in the shared
+**Everyone** room or open a private 1:1 thread with anyone else. Everything
+is stored in Firestore, so history persists across sessions like a normal
+messaging app.
+
+## Why it needs Firebase at all
+
+GitHub Pages only serves static files — it can't hold a live database or
+push real-time updates. Firebase's free **Spark** plan supplies that part
+(login + real-time storage) with no credit card required, while GitHub
+Pages keeps serving the page itself. Confirmed current Spark free quotas:
+50,000 monthly active Auth users, 1 GiB Firestore storage, 50,000 reads /
+20,000 writes / 20,000 deletes per day, 10 GiB egress a month — far more
+than a small private chat needs. Two things on Firebase always require the
+paid Blaze plan regardless of volume: Cloud Storage and Cloud Functions.
+This project uses neither, so it stays fully free.
+
+## One-time setup
+
+### 1. Create the Firebase project
+1. Go to [console.firebase.google.com](https://console.firebase.google.com) → **Add project** → give it a name → you can decline Google Analytics.
+2. **Build → Authentication → Get started → Sign-in method → Email/Password → Enable.**
+3. **Build → Firestore Database → Create database** → start in **production mode** → pick any region.
+4. **Project settings (gear icon) → General → Your apps → Web (`</>`)** → register an app (no need for Firebase Hosting) → copy the `firebaseConfig` object it shows you.
+
+### 2. Wire up `index.html`
+Open `index.html` and paste your copied values into the `firebaseConfig`
+object near the top of the `<script type="module">` block. These values
+are not secret — Firestore/Auth rules are what actually restrict access,
+not hiding this object.
+
+### 3. Publish the security rules
+Firestore Database → **Rules** tab → paste in the contents of
+`firestore.rules` from this repo → **Publish**. Without this step your
+data defaults to locked-down (nobody can read/write) or, if you chose test
+mode, wide open — either way, publish the rules here.
+
+### 4. Create your first accounts
+The admin script creates accounts; the website itself never lets anyone
+sign up.
+1. Project settings → **Service accounts** → **Generate new private key** → save the download as `serviceAccountKey.json` in this folder. Keep it private — it's already in `.gitignore` so it won't get pushed to GitHub.
+2. `npm install`
+3. `node create-user.js add alice "some strong password"` — repeat per person, including one for yourself.
+4. Tell each person their username/password directly (text, call, in person) — never put passwords in the repo or commit history.
+
+You can also run steps 2–3 for free in a **GitHub Codespace** on this repo
+instead of your own machine, if you'd rather not install Node locally.
+
+### 5. Publish to GitHub Pages
+1. Push this folder to a GitHub repo.
+2. Repo → **Settings → Pages → Source** → deploy from the branch/folder containing `index.html` (root is fine).
+3. Wait for the green checkmark, then open the `https://<you>.github.io/<repo>/` URL it gives you — that's the link you share with people (along with their personal username/password, separately).
+
+## Managing accounts later
+```
+node create-user.js add <username> <password>     # add someone
+node create-user.js remove <username>              # revoke access
+node create-user.js list                            # see all usernames
+```
+
+## Limitations worth knowing
+- **No self-signup, by design.** If someone forgets their password, only you can create a fresh one (there's no "forgot password" flow wired up, since Auth accounts use a fake `@wire.local` email rather than a real one you'd get reset emails through).
+- **No message editing/deleting** in the current rules (`update, delete: if false`) — kept simple and tamper-evident. Relax those lines in `firestore.rules` if you want it.
+- **No push notifications.** People need the tab open to see messages arrive live; reopening it re-shows full history. Adding email/Telegram pings for new messages is a reasonable next step if you want it, and can be done later without touching this architecture.
+- **Everyone with an account can see the full username list** (needed so people can pick who to DM). Don't create accounts for people you don't want to be discoverable to each other.

@@ -1,0 +1,9 @@
+{
+  "name": "wire-chat-admin",
+  "private": true,
+  "type": "module",
+  "description": "Admin CLI for creating Wire chat accounts. Not used by the site itself.",
+  "dependencies": {
+    "firebase-admin": "^13.0.0"
+  }
+}

@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#171B24;
+    --ink-soft:#232938;
+    --paper:#EDEFF1;
+    --paper-card:#FFFFFF;
+    --brass:#C6894A;
+    --brass-dim:#a9723c;
+    --slate:#5B6472;
+    --slate-light:#9199A6;
+    --bubble-mine:#26344A;
+    --line:#DADEE3;
+    --danger:#B24444;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:var(--ink);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .brand{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    letter-spacing:0.01em;
+  }
+
+  /* ---------- Login screen ---------- */
+  #login-screen{
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(circle at 20% 20%, #1f2635 0%, transparent 45%),
+      var(--ink);
+    padding:24px;
+  }
+  .login-card{
+    width:100%;
+    max-width:360px;
+    background:var(--ink-soft);
+    border:1px solid #2c3346;
+    border-radius:10px;
+    padding:36px 32px;
+  }
+  .login-card h1{
+    font-size:28px;
+    color:#F2EDE4;
+    margin:0 0 4px;
+  }
+  .login-card p.sub{
+    color:var(--slate-light);
+    font-size:13.5px;
+    margin:0 0 28px;
+    line-height:1.5;
+  }
+  label{
+    display:block;
+    font-size:12.5px;
+    color:var(--slate-light);
+    margin-bottom:6px;
+  }
+  .field{margin-bottom:16px;}
+  input[type=text], input[type=password]{
+    width:100%;
+    background:#141824;
+    border:1px solid #333b50;
+    border-radius:6px;
+    padding:11px 12px;
+    color:#F2EDE4;
+    font-size:15px;
+    font-family:'Inter',sans-serif;
+    outline:none;
+  }
+  input[type=text]:focus, input[type=password]:focus{
+    border-color:var(--brass);
+  }
+  button{
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+    border:none;
+  }
+  .btn-primary{
+    width:100%;
+    background:var(--brass);
+    color:#1a1206;
+    font-weight:600;
+    font-size:15px;
+    padding:12px;
+    border-radius:6px;
+    margin-top:6px;
+    transition:background 0.15s ease;
+  }
+  .btn-primary:hover{background:#d69756;}
+  .btn-primary:disabled{opacity:0.5;cursor:default;}
+  #login-error{
+    color:#e39a9a;
+    font-size:13px;
+    min-height:18px;
+    margin-top:14px;
+  }
+
+  /* ---------- App screen ---------- */
+  #app-screen{
+    display:none;
+    height:100%;
+  }
+  #app-screen.visible{
+    display:flex;
+  }
+  #sidebar{
+    width:260px;
+    min-width:260px;
+    background:var(--ink);
+    color:#e7e4db;
+    display:flex;
+    flex-direction:column;
+    border-right:1px solid #262c3b;
+  }
+  #sidebar-header{
+    padding:20px 18px 14px;
+    border-bottom:1px solid #262c3b;
+  }
+  #sidebar-header .wordmark{
+    font-size:20px;
+    color:#F2EDE4;
+  }
+  #sidebar-header .me{
+    font-size:12.5px;
+    color:var(--slate-light);
+    margin-top:4px;
+  }
+  #room-list{
+    flex:1;
+    overflow-y:auto;
+    padding:10px 0;
+  }
+  .section-label{
+    font-size:11px;
+    color:var(--slate-light);
+    padding:14px 18px 6px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .room-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 18px;
+    cursor:pointer;
+    font-size:14.5px;
+    color:#d8d5cb;
+    border-left:3px solid transparent;
+  }
+  .room-item:hover{background:#1e2432;}
+  .room-item.active{
+    background:#20283a;
+    border-left-color:var(--brass);
+    color:#F2EDE4;
+  }
+  .room-dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--brass);
+    flex:none;
+  }
+  .room-item.everyone .room-dot{background:#7fa3c9;}
+  #logout-btn{
+    margin:14px 18px 18px;
+    background:transparent;
+    border:1px solid #333b50;
+    color:var(--slate-light);
+    font-size:13px;
+    padding:8px;
+    border-radius:6px;
+  }
+  #logout-btn:hover{color:#F2EDE4;border-color:#4a5470;}
+
+  #main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    background:var(--paper);
+    min-width:0;
+  }
+  #chat-header{
+    padding:16px 26px;
+    border-bottom:1px solid var(--line);
+    background:var(--paper-card);
+  }
+  #chat-header .room-name{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:19px;
+    color:var(--ink);
+  }
+  #chat-header .room-meta{
+    font-size:12.5px;
+    color:var(--slate);
+    margin-top:2px;
+  }
+  #messages{
+    flex:1;
+    overflow-y:auto;
+    padding:24px 26px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .msg-row{
+    display:flex;
+    flex-direction:column;
+    max-width:62%;
+  }
+  .msg-row.mine{align-self:flex-end;align-items:flex-end;}
+  .msg-row.theirs{align-self:flex-start;align-items:flex-start;}
+  .msg-sender{
+    font-size:11.5px;
+    color:var(--slate);
+    margin:0 4px 3px;
+  }
+  .msg-bubble{
+    padding:9px 13px;
+    border-radius:12px;
+    font-size:14.5px;
+    line-height:1.45;
+    word-wrap:break-word;
+    white-space:pre-wrap;
+  }
+  .msg-row.theirs .msg-bubble{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    color:var(--ink);
+    border-top-left-radius:3px;
+  }
+  .msg-row.mine .msg-bubble{
+    background:var(--bubble-mine);
+    color:#F2EDE4;
+    border-top-right-radius:3px;
+  }
+  .msg-time{
+    font-size:10.5px;
+    color:var(--slate-light);
+    margin:3px 4px 0;
+    font-variant-numeric:tabular-nums;
+  }
+  #empty-state{
+    margin:auto;
+    text-align:center;
+    color:var(--slate);
+    font-size:14px;
+    max-width:280px;
+  }
+  #compose{
+    display:flex;
+    gap:10px;
+    padding:16px 26px 20px;
+    border-top:1px solid var(--line);
+    background:var(--paper-card);
+  }
+  #compose textarea{
+    flex:1;
+    resize:none;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:11px 13px;
+    font-family:'Inter',sans-serif;
+    font-size:14.5px;
+    max-height:120px;
+    outline:none;
+  }
+  #compose textarea:focus{border-color:var(--brass);}
+  #send-btn{
+    background:var(--ink);
+    color:#F2EDE4;
+    border-radius:8px;
+    padding:0 20px;
+    font-size:14px;
+    font-weight:600;
+  }
+  #send-btn:hover{background:#2a3244;}
+  #send-btn:disabled{opacity:0.4;cursor:default;}
+
+  #sidebar-toggle{
+    display:none;
+  }
+  @media (max-width: 720px){
+    #sidebar{
+      position:fixed;
+      z-index:5;
+      height:100%;
+      transform:translateX(-100%);
+      transition:transform 0.2s ease;
+    }
+    #sidebar.open{transform:translateX(0);}
+    #sidebar-toggle{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:34px;height:34px;
+      background:transparent;
+      border:1px solid var(--line);
+      border-radius:6px;
+      margin-right:10px;
+      color:var(--ink);
+      font-size:16px;
+    }
+    #chat-header{display:flex;align-items:center;}
+    .msg-row{max-width:82%;}
+  }
+
+  ::-webkit-scrollbar{width:8px;}
+  ::-webkit-scrollbar-thumb{background:#00000022;border-radius:4px;}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="login-screen">
+  <div class="login-card">
+    <h1 class="brand">Wire</h1>
+    <p class="sub">A private line. Enter the username and password you were given — no account creation here.</p>
+    <form id="login-form">
+      <div class="field">
+        <label for="username">Username</label>
+        <input type="text" id="username" autocomplete="username" required />
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" autocomplete="current-password" required />
+      </div>
+      <button type="submit" class="btn-primary" id="login-btn">Log in</button>
+      <div id="login-error"></div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app-screen">
+  <div id="sidebar">
+    <div id="sidebar-header">
+      <div class="wordmark brand">Wire</div>
+      <div class="me" id="me-label"></div>
+    </div>
+    <div id="room-list">
+      <div class="section-label">Channel</div>
+      <div class="room-item everyone active" data-room="everyone">
+        <span class="room-dot"></span> Everyone
+      </div>
+      <div class="section-label">Direct</div>
+      <div id="dm-list"></div>
+    </div>
+    <button id="logout-btn">Log out</button>
+  </div>
+
+  <div id="main">
+    <div id="chat-header">
+      <button id="sidebar-toggle">&#9776;</button>
+      <div>
+        <div class="room-name" id="room-name">Everyone</div>
+        <div class="room-meta" id="room-meta">Visible to everyone signed in</div>
+      </div>
+    </div>
+    <div id="messages"><div id="empty-state">No messages yet. Say something.</div></div>
+    <form id="compose">
+      <textarea id="msg-input" rows="1" placeholder="Message…" required></textarea>
+      <button type="submit" id="send-btn">Send</button>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import {
+  getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
+  setPersistence, browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+import {
+  getFirestore, collection, doc, setDoc, addDoc, query, orderBy,
+  limitToLast, onSnapshot, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+/* =========================================================
+   1. FIREBASE CONFIG — replace with YOUR project's config.
+      Get this from: Firebase Console → Project settings →
+      General → "Your apps" → Web app → SDK setup snippet.
+      These values are not secret — access is controlled by
+      Auth + Firestore rules, not by hiding this config.
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyBMpirq3Cdrg8EQ45yb2BlJ4U4Xrt32k8c",
+  authDomain: "free-chat-interface.firebaseapp.com",
+  projectId: "free-chat-interface",
+  storageBucket: "free-chat-interface.firebasestorage.app",
+  messagingSenderId: "913944928105",
+  appId: "1:913944928105:web:05f7aa0557e30668e867f8"
+};
+
+const EMAIL_SUFFIX = "@wire.local"; // fake email domain so usernames work with Firebase Auth
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+await setPersistence(auth, browserLocalPersistence);
+
+/* ---------- DOM refs ---------- */
+const loginScreen = document.getElementById('login-screen');
+const appScreen = document.getElementById('app-screen');
+const loginForm = document.getElementById('login-form');
+const loginBtn = document.getElementById('login-btn');
+const loginError = document.getElementById('login-error');
+const meLabel = document.getElementById('me-label');
+const dmList = document.getElementById('dm-list');
+const roomNameEl = document.getElementById('room-name');
+const roomMetaEl = document.getElementById('room-meta');
+const messagesEl = document.getElementById('messages');
+const composeForm = document.getElementById('compose');
+const msgInput = document.getElementById('msg-input');
+const sendBtn = document.getElementById('send-btn');
+const logoutBtn = document.getElementById('logout-btn');
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebar-toggle');
+const everyoneItem = document.querySelector('.room-item.everyone');
+
+let currentUid = null;
+let currentUsername = null;
+let currentRoom = { type: 'everyone', id: 'everyone', label: 'Everyone' };
+let unsubMessages = null;
+let unsubUsers = null;
+let knownUsers = {}; // uid -> username
+
+/* ---------- Auth ---------- */
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  loginError.textContent = '';
+  loginBtn.disabled = true;
+  const username = document.getElementById('username').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+  try {
+    await signInWithEmailAndPassword(auth, username + EMAIL_SUFFIX, password);
+  } catch (err) {
+    loginError.textContent = 'Wrong username or password. Ask whoever set up Wire for access.';
+  } finally {
+    loginBtn.disabled = false;
+  }
+});
+
+logoutBtn.addEventListener('click', () => signOut(auth));
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUid = user.uid;
+    currentUsername = user.email.replace(EMAIL_SUFFIX, '');
+    meLabel.textContent = 'Signed in as ' + currentUsername;
+    loginScreen.style.display = 'none';
+    appScreen.classList.add('visible');
+    await setDoc(doc(db, 'users', currentUid), { username: currentUsername }, { merge: true });
+    watchUserList();
+    openRoom({ type: 'everyone', id: 'everyone', label: 'Everyone' });
+  } else {
+    currentUid = null;
+    appScreen.classList.remove('visible');
+    loginScreen.style.display = 'flex';
+    if (unsubMessages) unsubMessages();
+    if (unsubUsers) unsubUsers();
+    dmList.innerHTML = '';
+  }
+});
+
+/* ---------- User directory (for starting DMs) ---------- */
+function watchUserList() {
+  const q = query(collection(db, 'users'));
+  unsubUsers = onSnapshot(q, (snap) => {
+    knownUsers = {};
+    dmList.innerHTML = '';
+    snap.forEach((d) => {
+      if (d.id === currentUid) return;
+      const username = d.data().username;
+      knownUsers[d.id] = username;
+      const el = document.createElement('div');
+      el.className = 'room-item';
+      el.dataset.uid = d.id;
+      el.innerHTML = `<span class="room-dot" style="background:#9199A6"></span> ${escapeHtml(username)}`;
+      el.addEventListener('click', () => {
+        const threadId = [currentUid, d.id].sort().join('_');
+        openRoom({ type: 'dm', id: threadId, label: username, otherUid: d.id });
+      });
+      dmList.appendChild(el);
+    });
+    highlightActiveRoom();
+  });
+}
+
+everyoneItem.addEventListener('click', () => {
+  openRoom({ type: 'everyone', id: 'everyone', label: 'Everyone' });
+});
+
+sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+
+function highlightActiveRoom() {
+  document.querySelectorAll('.room-item').forEach((el) => el.classList.remove('active'));
+  if (currentRoom.type === 'everyone') {
+    everyoneItem.classList.add('active');
+  } else {
+    const el = dmList.querySelector(`[data-uid="${currentRoom.otherUid}"]`);
+    if (el) el.classList.add('active');
+  }
+}
+
+/* ---------- Rooms & messages ---------- */
+async function openRoom(room) {
+  currentRoom = room;
+  sidebar.classList.remove('open');
+  roomNameEl.textContent = room.label;
+  roomMetaEl.textContent = room.type === 'everyone'
+    ? 'Visible to everyone signed in'
+    : 'Private — only you and ' + room.label;
+  highlightActiveRoom();
+
+  if (unsubMessages) unsubMessages();
+  messagesEl.innerHTML = '';
+
+  let messagesRef;
+  if (room.type === 'everyone') {
+    messagesRef = collection(db, 'rooms', 'everyone', 'messages');
+  } else {
+    // ensure the DM thread doc exists / has both participants
+    await setDoc(doc(db, 'dms', room.id), {
+      participants: [currentUid, room.otherUid].sort(),
+    }, { merge: true });
+    messagesRef = collection(db, 'dms', room.id, 'messages');
+  }
+
+  const q = query(messagesRef, orderBy('createdAt', 'asc'), limitToLast(300));
+  unsubMessages = onSnapshot(q, (snap) => {
+    messagesEl.innerHTML = '';
+    if (snap.empty) {
+      const empty = document.createElement('div');
+      empty.id = 'empty-state';
+      empty.textContent = 'No messages yet. Say something.';
+      messagesEl.appendChild(empty);
+      return;
+    }
+    snap.forEach((d) => renderMessage(d.data(), room.type === 'everyone'));
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  });
+}
+
+function renderMessage(msg, showSender) {
+  const row = document.createElement('div');
+  const mine = msg.uid === currentUid;
+  row.className = 'msg-row ' + (mine ? 'mine' : 'theirs');
+
+  if (showSender && !mine) {
+    const sender = document.createElement('div');
+    sender.className = 'msg-sender';
+    sender.textContent = msg.username || 'unknown';
+    row.appendChild(sender);
+  }
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.textContent = msg.text;
+  row.appendChild(bubble);
+
+  const time = document.createElement('div');
+  time.className = 'msg-time';
+  time.textContent = formatTime(msg.createdAt);
+  row.appendChild(time);
+
+  messagesEl.appendChild(row);
+}
+
+function formatTime(ts) {
+  if (!ts || !ts.toDate) return '';
+  const d = ts.toDate();
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+/* ---------- Sending ---------- */
+composeForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const text = msgInput.value.trim();
+  if (!text) return;
+  sendBtn.disabled = true;
+  msgInput.value = '';
+  autoGrow();
+  try {
+    const messagesRef = currentRoom.type === 'everyone'
+      ? collection(db, 'rooms', 'everyone', 'messages')
+      : collection(db, 'dms', currentRoom.id, 'messages');
+    await addDoc(messagesRef, {
+      text,
+      uid: currentUid,
+      username: currentUsername,
+      createdAt: serverTimestamp(),
+    });
+  } finally {
+    sendBtn.disabled = false;
+    msgInput.focus();
+  }
+});
+
+msgInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    composeForm.requestSubmit();
+  }
+});
+msgInput.addEventListener('input', autoGrow);
+function autoGrow() {
+  msgInput.style.height = 'auto';
+  msgInput.style.height = Math.min(msgInput.scrollHeight, 120) + 'px';
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+</script>
+</body>
+</html>
