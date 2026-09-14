@@ -449,6 +449,7 @@ loginForm.addEventListener('submit', async (e) => {
   try {
     await signInWithEmailAndPassword(auth, username + EMAIL_SUFFIX, password);
   } catch (err) {
+    console.error(err.code, err.message);
     loginError.textContent = 'Wrong username or password. Ask whoever set up Wire for access.';
   } finally {
     loginBtn.disabled = false;
