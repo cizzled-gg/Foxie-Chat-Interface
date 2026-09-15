@@ -2,638 +2,2439 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Wire</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="referrer" content="no-referrer" />
+<title>Foxie</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;600&family=Playfair+Display:wght@500;700&family=Space+Grotesk:wght@500;700&family=Cinzel:wght@500;700&family=Lobster&family=Bebas+Neue&family=Caveat:wght@600&family=Orbitron:wght@600&family=Righteous&family=Pacifico&family=VT323&family=Cormorant+Garamond:wght@500;700&family=Oswald:wght@500&family=Raleway:wght@500;700&family=Merriweather:wght@400;700&family=Comfortaa:wght@600&family=Abril+Fatface&family=Sora:wght@500;700&family=Silkscreen&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ink:#171B24;
-    --ink-soft:#232938;
-    --paper:#EDEFF1;
-    --paper-card:#FFFFFF;
-    --brass:#C6894A;
-    --brass-dim:#a9723c;
-    --slate:#5B6472;
-    --slate-light:#9199A6;
-    --bubble-mine:#26344A;
-    --line:#DADEE3;
-    --danger:#B24444;
-  }
-  *{box-sizing:border-box;}
-  html,body{height:100%;}
-  body{
-    margin:0;
-    font-family:'Inter',sans-serif;
-    background:var(--ink);
-    color:var(--ink);
-    -webkit-font-smoothing:antialiased;
-  }
-  .brand{
-    font-family:'Fraunces',serif;
-    font-weight:600;
-    letter-spacing:0.01em;
-  }
+:root{
+  --bg-0:#07080C;
+  --bg-1:#0B0D14;
+  --bg-2:#10131C;
+  --bg-3:#161A26;
+  --bg-4:#1D2230;
+  --glass:rgba(255,255,255,0.035);
+  --glass-2:rgba(255,255,255,0.055);
+  --hair:rgba(255,255,255,0.075);
+  --hair-2:rgba(255,255,255,0.13);
+  --text:#E8E6E1;
+  --text-2:#A5A9B6;
+  --text-3:#6E7486;
+  --amber:#E0A85C;
+  --amber-2:#C88B3E;
+  --violet:#8B7BD8;
+  --teal:#5BC0AC;
+  --rose:#D8697B;
+  --green:#4FC97F;
+  --grey:#5A6072;
+  --danger:#E06A6A;
+  --warn:#E0B054;
+  --radius:14px;
+  --radius-s:9px;
+  --shadow-1:0 1px 2px rgba(0,0,0,.4);
+  --shadow-2:0 8px 30px rgba(0,0,0,.55);
+  --shadow-3:0 20px 60px rgba(0,0,0,.7);
+  --ease:cubic-bezier(.2,.7,.3,1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;margin:0;overflow:hidden;}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg-0);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  font-size:14px;
+  line-height:1.5;
+}
+#aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+#aurora span{
+  position:absolute;border-radius:50%;filter:blur(90px);opacity:.30;
+  animation:drift 34s var(--ease) infinite alternate;
+}
+#aurora span:nth-child(1){width:52vw;height:52vw;background:#3A2E6B;top:-14%;left:-10%;}
+#aurora span:nth-child(2){width:42vw;height:42vw;background:#6B4A21;bottom:-16%;right:-8%;animation-delay:-11s;}
+#aurora span:nth-child(3){width:34vw;height:34vw;background:#1E4A47;top:38%;left:44%;animation-delay:-22s;opacity:.20;}
+@keyframes drift{
+  0%{transform:translate3d(0,0,0) scale(1);}
+  100%{transform:translate3d(5vw,7vh,0) scale(1.18);}
+}
+#grain{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+button,input,textarea,select{font-family:inherit;font-size:inherit;color:inherit;}
+button{cursor:pointer;border:none;background:none;}
+::-webkit-scrollbar{width:9px;height:9px;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.09);border-radius:6px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.16);}
+::-webkit-scrollbar-track{background:transparent;}
+.display{font-family:'Fraunces',serif;font-weight:600;letter-spacing:.005em;}
+.mono{font-family:'JetBrains Mono',monospace;}
 
-  /* ---------- Login screen ---------- */
-  #login-screen{
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:
-      radial-gradient(circle at 20% 20%, #1f2635 0%, transparent 45%),
-      var(--ink);
-    padding:24px;
-  }
-  .login-card{
-    width:100%;
-    max-width:360px;
-    background:var(--ink-soft);
-    border:1px solid #2c3346;
-    border-radius:10px;
-    padding:36px 32px;
-  }
-  .login-card h1{
-    font-size:28px;
-    color:#F2EDE4;
-    margin:0 0 4px;
-  }
-  .login-card p.sub{
-    color:var(--slate-light);
-    font-size:13.5px;
-    margin:0 0 28px;
-    line-height:1.5;
-  }
-  label{
-    display:block;
-    font-size:12.5px;
-    color:var(--slate-light);
-    margin-bottom:6px;
-  }
-  .field{margin-bottom:16px;}
-  input[type=text], input[type=]{
-    width:100%;
-    background:#141824;
-    border:1px solid #333b50;
-    border-radius:6px;
-    padding:11px 12px;
-    color:#F2EDE4;
-    font-size:15px;
-    font-family:'Inter',sans-serif;
-    outline:none;
-  }
-  input[type=text]:focus, input[type=]:focus{
-    border-color:var(--brass);
-  }
-  button{
-    font-family:'Inter',sans-serif;
-    cursor:pointer;
-    border:none;
-  }
-  .btn-primary{
-    width:100%;
-    background:var(--brass);
-    color:#1a1206;
-    font-weight:600;
-    font-size:15px;
-    padding:12px;
-    border-radius:6px;
-    margin-top:6px;
-    transition:background 0.15s ease;
-  }
-  .btn-primary:hover{background:#d69756;}
-  .btn-primary:disabled{opacity:0.5;cursor:default;}
-  #login-error{
-    color:#e39a9a;
-    font-size:13px;
-    min-height:18px;
-    margin-top:14px;
-  }
+/* ============ LOGIN ============ */
+#login{
+  position:relative;z-index:2;height:100%;
+  display:flex;align-items:center;justify-content:center;padding:22px;
+}
+.card{
+  width:100%;max-width:392px;
+  background:linear-gradient(170deg,rgba(28,32,45,.88),rgba(14,16,23,.94));
+  border:1px solid var(--hair);
+  border-radius:20px;padding:38px 34px 30px;
+  box-shadow:var(--shadow-3);
+  backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);
+}
+.logo-row{display:flex;align-items:center;gap:11px;margin-bottom:6px;}
+.logo-mark{
+  width:38px;height:38px;border-radius:11px;flex:none;
+  background:linear-gradient(140deg,var(--amber),#9A5FBF);
+  display:grid;place-items:center;font-size:20px;
+  box-shadow:0 5px 18px rgba(224,168,92,.28);
+}
+.card h1{font-size:29px;margin:0;color:#F4F1EA;}
+.card .sub{color:var(--text-3);font-size:13px;margin:0 0 26px;line-height:1.55;}
+.field{margin-bottom:14px;}
+label{display:block;font-size:11.5px;color:var(--text-3);margin-bottom:6px;letter-spacing:.03em;text-transform:uppercase;font-weight:500;}
+.inp{
+  width:100%;background:rgba(0,0,0,.34);border:1px solid var(--hair);
+  border-radius:var(--radius-s);padding:11px 13px;color:var(--text);
+  outline:none;transition:border-color .16s,background .16s;
+}
+.inp:focus{border-color:var(--amber);background:rgba(0,0,0,.5);}
+.inp::placeholder{color:var(--text-3);}
+textarea.inp{resize:vertical;min-height:70px;line-height:1.55;}
+.btn{
+  border-radius:var(--radius-s);padding:10px 16px;font-weight:600;font-size:13.5px;
+  transition:transform .12s var(--ease),filter .16s,background .16s;
+}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:linear-gradient(140deg,var(--amber),var(--amber-2));color:#241703;width:100%;padding:12px;}
+.btn-primary:hover{filter:brightness(1.08);}
+.btn-primary:disabled{opacity:.45;cursor:default;filter:none;}
+.btn-ghost{background:var(--glass);border:1px solid var(--hair);color:var(--text-2);}
+.btn-ghost:hover{background:var(--glass-2);color:var(--text);}
+.btn-danger{background:rgba(224,106,106,.12);border:1px solid rgba(224,106,106,.3);color:#EFA0A0;}
+.btn-danger:hover{background:rgba(224,106,106,.2);}
+.note{font-size:12.5px;min-height:17px;margin-top:13px;line-height:1.5;}
+.note.err{color:#EFA0A0;}
+.note.ok{color:#8FD9AE;}
 
-  /* ---------- App screen ---------- */
-  #app-screen{
-    display:none;
-    height:100%;
-  }
-  #app-screen.visible{
-    display:flex;
-  }
-  #sidebar{
-    width:260px;
-    min-width:260px;
-    background:var(--ink);
-    color:#e7e4db;
-    display:flex;
-    flex-direction:column;
-    border-right:1px solid #262c3b;
-  }
-  #sidebar-header{
-    padding:20px 18px 14px;
-    border-bottom:1px solid #262c3b;
-  }
-  #sidebar-header .wordmark{
-    font-size:20px;
-    color:#F2EDE4;
-  }
-  #sidebar-header .me{
-    font-size:12.5px;
-    color:var(--slate-light);
-    margin-top:4px;
-  }
-  #room-list{
-    flex:1;
-    overflow-y:auto;
-    padding:10px 0;
-  }
-  .section-label{
-    font-size:11px;
-    color:var(--slate-light);
-    padding:14px 18px 6px;
-    text-transform:uppercase;
-    letter-spacing:0.06em;
-  }
-  .room-item{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 18px;
-    cursor:pointer;
-    font-size:14.5px;
-    color:#d8d5cb;
-    border-left:3px solid transparent;
-  }
-  .room-item:hover{background:#1e2432;}
-  .room-item.active{
-    background:#20283a;
-    border-left-color:var(--brass);
-    color:#F2EDE4;
-  }
-  .room-dot{
-    width:8px;height:8px;border-radius:50%;
-    background:var(--brass);
-    flex:none;
-  }
-  .room-item.everyone .room-dot{background:#7fa3c9;}
-  #logout-btn{
-    margin:14px 18px 18px;
-    background:transparent;
-    border:1px solid #333b50;
-    color:var(--slate-light);
-    font-size:13px;
-    padding:8px;
-    border-radius:6px;
-  }
-  #logout-btn:hover{color:#F2EDE4;border-color:#4a5470;}
+/* ============ SHELL ============ */
+#app{display:none;position:relative;z-index:2;height:100%;flex-direction:column;}
+#app.on{display:flex;}
+#topbar{
+  height:50px;flex:none;display:flex;align-items:center;gap:6px;padding:0 12px;
+  background:rgba(10,12,18,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--hair);
+}
+.top-brand{display:flex;align-items:center;gap:8px;margin-right:6px;}
+.top-brand .logo-mark{width:27px;height:27px;border-radius:8px;font-size:14px;}
+.top-brand .name{font-size:16px;color:#F4F1EA;}
+.spacer{flex:1;}
+.tbtn{
+  position:relative;width:35px;height:35px;border-radius:9px;display:grid;place-items:center;
+  color:var(--text-2);transition:background .15s,color .15s;font-size:15px;
+}
+.tbtn:hover{background:var(--glass-2);color:var(--text);}
+.tbtn.on{background:rgba(224,168,92,.14);color:var(--amber);}
+.badge{
+  position:absolute;top:2px;right:2px;min-width:16px;height:16px;padding:0 4px;
+  border-radius:8px;background:var(--rose);color:#fff;font-size:10px;font-weight:700;
+  display:grid;place-items:center;border:2px solid var(--bg-1);
+}
+.badge.amber{background:var(--amber);color:#241703;}
+#body{flex:1;display:flex;min-height:0;}
 
-  #main{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    background:var(--paper);
-    min-width:0;
-  }
-  #chat-header{
-    padding:16px 26px;
-    border-bottom:1px solid var(--line);
-    background:var(--paper-card);
-  }
-  #chat-header .room-name{
-    font-family:'Fraunces',serif;
-    font-weight:600;
-    font-size:19px;
-    color:var(--ink);
-  }
-  #chat-header .room-meta{
-    font-size:12.5px;
-    color:var(--slate);
-    margin-top:2px;
-  }
-  #messages{
-    flex:1;
-    overflow-y:auto;
-    padding:24px 26px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-  }
-  .msg-row{
-    display:flex;
-    flex-direction:column;
-    max-width:62%;
-  }
-  .msg-row.mine{align-self:flex-end;align-items:flex-end;}
-  .msg-row.theirs{align-self:flex-start;align-items:flex-start;}
-  .msg-sender{
-    font-size:11.5px;
-    color:var(--slate);
-    margin:0 4px 3px;
-  }
-  .msg-bubble{
-    padding:9px 13px;
-    border-radius:12px;
-    font-size:14.5px;
-    line-height:1.45;
-    word-wrap:break-word;
-    white-space:pre-wrap;
-  }
-  .msg-row.theirs .msg-bubble{
-    background:var(--paper-card);
-    border:1px solid var(--line);
-    color:var(--ink);
-    border-top-left-radius:3px;
-  }
-  .msg-row.mine .msg-bubble{
-    background:var(--bubble-mine);
-    color:#F2EDE4;
-    border-top-right-radius:3px;
-  }
-  .msg-time{
-    font-size:10.5px;
-    color:var(--slate-light);
-    margin:3px 4px 0;
-    font-variant-numeric:tabular-nums;
-  }
-  #empty-state{
-    margin:auto;
-    text-align:center;
-    color:var(--slate);
-    font-size:14px;
-    max-width:280px;
-  }
-  #compose{
-    display:flex;
-    gap:10px;
-    padding:16px 26px 20px;
-    border-top:1px solid var(--line);
-    background:var(--paper-card);
-  }
-  #compose textarea{
-    flex:1;
-    resize:none;
-    border:1px solid var(--line);
-    border-radius:8px;
-    padding:11px 13px;
-    font-family:'Inter',sans-serif;
-    font-size:14.5px;
-    max-height:120px;
-    outline:none;
-  }
-  #compose textarea:focus{border-color:var(--brass);}
-  #send-btn{
-    background:var(--ink);
-    color:#F2EDE4;
-    border-radius:8px;
-    padding:0 20px;
-    font-size:14px;
-    font-weight:600;
-  }
-  #send-btn:hover{background:#2a3244;}
-  #send-btn:disabled{opacity:0.4;cursor:default;}
+/* ============ SIDEBAR ============ */
+#side{
+  width:266px;min-width:266px;display:flex;flex-direction:column;
+  background:rgba(9,11,17,.6);border-right:1px solid var(--hair);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+}
+#side-scroll{flex:1;overflow-y:auto;padding:8px 0 14px;}
+.sec{
+  font-size:10.5px;color:var(--text-3);padding:15px 16px 7px;
+  text-transform:uppercase;letter-spacing:.09em;font-weight:600;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sec button{font-size:15px;color:var(--text-3);line-height:1;}
+.sec button:hover{color:var(--amber);}
+.row{
+  display:flex;align-items:center;gap:10px;padding:8px 14px;margin:1px 8px;
+  border-radius:10px;cursor:pointer;transition:background .14s;position:relative;
+}
+.row:hover{background:var(--glass);}
+.row.active{background:var(--glass-2);}
+.row.active::before{
+  content:'';position:absolute;left:-8px;top:50%;transform:translateY(-50%);
+  width:3px;height:19px;border-radius:0 3px 3px 0;background:var(--amber);
+}
+.row .label{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;}
+.row.unread .label{font-weight:700;color:#fff;}
+.pill{
+  min-width:19px;height:19px;padding:0 6px;border-radius:10px;background:var(--rose);
+  color:#fff;font-size:10.5px;font-weight:700;display:grid;place-items:center;flex:none;
+}
+.pill.dim{background:var(--glass-2);color:var(--text-3);}
+.hash{
+  width:29px;height:29px;border-radius:9px;flex:none;display:grid;place-items:center;
+  background:linear-gradient(140deg,rgba(139,123,216,.3),rgba(91,192,172,.22));
+  font-size:14px;
+}
+.av{
+  position:relative;width:30px;height:30px;border-radius:50%;flex:none;
+  background:var(--bg-4);display:grid;place-items:center;overflow:visible;
+  font-weight:600;font-size:12.5px;color:var(--text-2);
+}
+.av img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;}
+.av .dot{
+  position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:50%;
+  background:var(--grey);border:2.5px solid var(--bg-1);transition:background .3s;
+}
+.av .dot.on{background:var(--green);}
+.av.lg{width:74px;height:74px;font-size:28px;}
+.av.lg .dot{width:19px;height:19px;border-width:4px;}
+.av.xl{width:96px;height:96px;font-size:36px;}
+.av.xl .dot{width:23px;height:23px;border-width:5px;}
+.av.sm{width:26px;height:26px;font-size:11px;}
+#me-bar{
+  flex:none;display:flex;align-items:center;gap:10px;padding:9px 12px;
+  border-top:1px solid var(--hair);background:rgba(0,0,0,.24);
+}
+#me-bar .txt{flex:1;min-width:0;}
+#me-bar .n{font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#me-bar .u{font-size:11px;color:var(--text-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.empty-hint{padding:10px 18px;font-size:12px;color:var(--text-3);line-height:1.55;}
 
-  #sidebar-toggle{
-    display:none;
-  }
-  @media (max-width: 720px){
-    #sidebar{
-      position:fixed;
-      z-index:5;
-      height:100%;
-      transform:translateX(-100%);
-      transition:transform 0.2s ease;
-    }
-    #sidebar.open{transform:translateX(0);}
-    #sidebar-toggle{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:34px;height:34px;
-      background:transparent;
-      border:1px solid var(--line);
-      border-radius:6px;
-      margin-right:10px;
-      color:var(--ink);
-      font-size:16px;
-    }
-    #chat-header{display:flex;align-items:center;}
-    .msg-row{max-width:82%;}
-  }
+/* ============ MAIN ============ */
+#main{flex:1;display:flex;flex-direction:column;min-width:0;background:rgba(11,13,20,.34);}
+#chatbar{
+  flex:none;height:52px;display:flex;align-items:center;gap:11px;padding:0 18px;
+  border-bottom:1px solid var(--hair);background:rgba(10,12,18,.5);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+#chatbar .ident{display:flex;align-items:center;gap:10px;cursor:pointer;padding:5px 9px;margin-left:-9px;border-radius:10px;transition:background .14s;min-width:0;}
+#chatbar .ident:hover{background:var(--glass);}
+#chat-title{font-size:15.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#chat-sub{font-size:11.5px;color:var(--text-3);}
+.lock-chip{
+  display:inline-flex;align-items:center;gap:5px;font-size:10.5px;padding:3px 8px;border-radius:7px;
+  background:rgba(91,192,172,.13);color:var(--teal);border:1px solid rgba(91,192,172,.24);font-weight:600;
+}
+.lock-chip.open{background:rgba(224,176,84,.11);color:var(--warn);border-color:rgba(224,176,84,.24);}
+#msgs{flex:1;overflow-y:auto;padding:20px 22px 8px;display:flex;flex-direction:column;gap:2px;}
+#msgs .stub{margin:auto;text-align:center;color:var(--text-3);font-size:13.5px;max-width:330px;line-height:1.65;}
+.divider{display:flex;align-items:center;gap:12px;margin:14px 2px 10px;}
+.divider .ln{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--rose),var(--rose));opacity:.55;}
+.divider .ln.r{background:linear-gradient(90deg,var(--rose),var(--rose),transparent);}
+.divider .tag{font-size:10.5px;font-weight:700;color:var(--rose);letter-spacing:.09em;text-transform:uppercase;}
+.daysep{display:flex;align-items:center;gap:12px;margin:16px 2px 8px;}
+.daysep .ln{flex:1;height:1px;background:var(--hair);}
+.daysep .tag{font-size:10.5px;color:var(--text-3);font-weight:600;letter-spacing:.05em;}
 
-  ::-webkit-scrollbar{width:8px;}
-  ::-webkit-scrollbar-thumb{background:#00000022;border-radius:4px;}
+.m{display:flex;gap:11px;padding:3px 8px;border-radius:10px;position:relative;transition:background .12s;}
+.m:hover{background:rgba(255,255,255,.022);}
+.m.grouped{margin-top:0;}
+.m:not(.grouped){margin-top:11px;}
+.m .gutter{width:34px;flex:none;display:flex;justify-content:center;padding-top:3px;}
+.m .gutter .stamp{font-size:9.5px;color:var(--text-3);opacity:0;padding-top:4px;font-variant-numeric:tabular-nums;}
+.m:hover .gutter .stamp{opacity:1;}
+.m .content{flex:1;min-width:0;}
+.m .head{display:flex;align-items:baseline;gap:9px;margin-bottom:2px;flex-wrap:wrap;}
+.m .who{font-weight:600;font-size:14.5px;cursor:pointer;}
+.m .who:hover{text-decoration:underline;}
+.m .when{font-size:10.5px;color:var(--text-3);font-variant-numeric:tabular-nums;}
+.m .text{font-size:14.5px;line-height:1.58;word-wrap:break-word;overflow-wrap:anywhere;white-space:pre-wrap;}
+.m.tomb .text{color:var(--text-3);font-style:italic;font-size:13.5px;}
+.m .text a{color:var(--amber);text-decoration:none;border-bottom:1px solid rgba(224,168,92,.35);}
+.m .text a:hover{border-bottom-color:var(--amber);}
+.m-actions{
+  position:absolute;top:-13px;right:12px;display:none;gap:1px;padding:3px;
+  background:var(--bg-3);border:1px solid var(--hair);border-radius:9px;box-shadow:var(--shadow-2);
+}
+.m:hover .m-actions{display:flex;}
+.m-actions button{width:28px;height:26px;border-radius:6px;display:grid;place-items:center;font-size:14px;color:var(--text-2);}
+.m-actions button:hover{background:var(--glass-2);color:var(--text);}
+.reacts{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
+.react{
+  display:inline-flex;align-items:center;gap:5px;height:25px;padding:0 8px;border-radius:8px;
+  background:var(--glass);border:1px solid var(--hair);font-size:12.5px;cursor:pointer;
+  transition:background .13s,border-color .13s;
+}
+.react:hover{background:var(--glass-2);}
+.react.mine{background:rgba(224,168,92,.15);border-color:rgba(224,168,92,.42);}
+.react .n{font-size:11px;font-weight:700;color:var(--text-2);}
+.react.mine .n{color:var(--amber);}
+
+/* file card */
+.filecard{
+  margin-top:7px;max-width:410px;border-radius:13px;overflow:hidden;
+  border:1px solid rgba(139,123,216,.28);
+  background:linear-gradient(150deg,rgba(139,123,216,.11),rgba(91,192,172,.06));
+}
+.filecard .fc-top{display:flex;align-items:center;gap:11px;padding:12px 13px 10px;}
+.filecard .fc-ic{
+  width:39px;height:39px;border-radius:11px;flex:none;display:grid;place-items:center;font-size:18px;
+  background:linear-gradient(140deg,rgba(139,123,216,.35),rgba(91,192,172,.25));
+}
+.filecard .fc-n{font-weight:600;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.filecard .fc-s{font-size:11px;color:var(--text-3);margin-top:1px;}
+.filecard .fc-meta{display:flex;gap:7px;padding:0 13px 11px;flex-wrap:wrap;}
+.chip{
+  font-size:10.5px;padding:3.5px 8px;border-radius:7px;background:rgba(0,0,0,.3);
+  border:1px solid var(--hair);color:var(--text-2);font-weight:500;
+}
+.chip.live{color:var(--teal);border-color:rgba(91,192,172,.3);}
+.chip.dead{color:var(--danger);border-color:rgba(224,106,106,.3);}
+.chip.warn{color:var(--warn);border-color:rgba(224,176,84,.3);}
+.filecard .fc-go{
+  display:block;text-align:center;padding:9px;font-size:12.5px;font-weight:600;
+  background:rgba(0,0,0,.32);color:var(--violet);text-decoration:none;
+  border-top:1px solid var(--hair);transition:background .14s;
+}
+.filecard .fc-go:hover{background:rgba(139,123,216,.14);}
+
+/* typing */
+#typing{flex:none;height:21px;padding:0 24px;font-size:11.5px;color:var(--text-3);display:flex;align-items:center;gap:7px;}
+.tdots{display:inline-flex;gap:3px;}
+.tdots i{width:4px;height:4px;border-radius:50%;background:var(--text-3);animation:bob 1.25s infinite;}
+.tdots i:nth-child(2){animation-delay:.16s;}
+.tdots i:nth-child(3){animation-delay:.32s;}
+@keyframes bob{0%,60%,100%{opacity:.3;transform:translateY(0);}30%{opacity:1;transform:translateY(-3px);}}
+
+/* composer */
+#composer{flex:none;padding:0 20px 16px;}
+#compose-shell{
+  border:1px solid var(--hair);border-radius:14px;background:rgba(0,0,0,.34);
+  transition:border-color .16s;overflow:hidden;
+}
+#compose-shell:focus-within{border-color:rgba(224,168,92,.45);}
+#fmtbar{display:flex;align-items:center;gap:3px;padding:6px 8px;border-bottom:1px solid var(--hair);flex-wrap:wrap;}
+.fbtn{
+  height:27px;min-width:27px;padding:0 7px;border-radius:7px;display:grid;place-items:center;
+  color:var(--text-3);font-size:12.5px;transition:background .13s,color .13s;
+}
+.fbtn:hover{background:var(--glass-2);color:var(--text);}
+.fbtn.on{background:rgba(224,168,92,.17);color:var(--amber);}
+.fbtn.b{font-weight:800;}
+.fbtn.i{font-style:italic;font-family:'Playfair Display',serif;}
+.fbtn.u{text-decoration:underline;}
+.fbtn.s{text-decoration:line-through;}
+.fsep{width:1px;height:17px;background:var(--hair);margin:0 3px;}
+.fmt-select{
+  height:27px;border-radius:7px;background:rgba(0,0,0,.35);border:1px solid var(--hair);
+  color:var(--text-2);font-size:11.5px;padding:0 5px;outline:none;max-width:118px;
+}
+.swatch{width:21px;height:21px;border-radius:6px;border:1px solid var(--hair-2);cursor:pointer;padding:0;}
+#editor{
+  min-height:44px;max-height:190px;overflow-y:auto;padding:11px 13px;font-size:14.5px;
+  line-height:1.58;outline:none;word-wrap:break-word;overflow-wrap:anywhere;
+}
+#editor:empty::before{content:attr(data-ph);color:var(--text-3);pointer-events:none;}
+#compose-foot{display:flex;align-items:center;gap:8px;padding:0 9px 9px;}
+#compose-foot .hint{flex:1;font-size:10.5px;color:var(--text-3);}
+#send{
+  background:linear-gradient(140deg,var(--amber),var(--amber-2));color:#241703;
+  border-radius:9px;padding:8px 18px;font-weight:700;font-size:13px;
+}
+#send:hover{filter:brightness(1.08);}
+#send:disabled{opacity:.4;filter:none;cursor:default;}
+
+/* ============ OVERLAYS ============ */
+.scrim{
+  position:fixed;inset:0;z-index:40;background:rgba(3,4,7,.72);
+  backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+  display:none;align-items:center;justify-content:center;padding:22px;
+  animation:fade .18s var(--ease);
+}
+.scrim.on{display:flex;}
+@keyframes fade{from{opacity:0;}to{opacity:1;}}
+@keyframes rise{from{opacity:0;transform:translateY(14px) scale(.985);}to{opacity:1;transform:none;}}
+.sheet{
+  width:100%;max-width:560px;max-height:86vh;display:flex;flex-direction:column;
+  background:linear-gradient(170deg,rgba(27,31,43,.97),rgba(13,15,22,.99));
+  border:1px solid var(--hair-2);border-radius:19px;box-shadow:var(--shadow-3);
+  animation:rise .22s var(--ease);overflow:hidden;
+}
+.sheet.wide{max-width:660px;}
+.sheet-head{
+  flex:none;display:flex;align-items:center;gap:11px;padding:17px 20px;
+  border-bottom:1px solid var(--hair);
+}
+.sheet-head .t{flex:1;font-size:17px;font-weight:600;font-family:'Fraunces',serif;}
+.sheet-body{flex:1;overflow-y:auto;padding:18px 20px 22px;}
+.sheet-foot{flex:none;display:flex;gap:9px;justify-content:flex-end;padding:13px 20px;border-top:1px solid var(--hair);}
+.x{width:31px;height:31px;border-radius:8px;display:grid;place-items:center;color:var(--text-3);font-size:17px;}
+.x:hover{background:var(--glass-2);color:var(--text);}
+
+.tabs{display:flex;gap:3px;padding:4px;background:rgba(0,0,0,.3);border-radius:11px;margin-bottom:18px;flex-wrap:wrap;}
+.tab{flex:1;min-width:76px;padding:8px 9px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--text-3);text-align:center;transition:background .14s,color .14s;}
+.tab:hover{color:var(--text-2);}
+.tab.on{background:var(--glass-2);color:var(--amber);}
+.pane{display:none;}
+.pane.on{display:block;animation:fade .18s var(--ease);}
+.grp{margin-bottom:20px;}
+.grp > h4{
+  font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;
+  margin:0 0 9px;font-weight:600;
+}
+.help{font-size:11.5px;color:var(--text-3);line-height:1.55;margin-top:6px;}
+.help.warn{color:var(--warn);}
+.help.bad{color:var(--danger);}
+
+/* profile card */
+.prof-banner{height:74px;background:linear-gradient(115deg,var(--amber),#9A5FBF,var(--teal));position:relative;}
+.prof-top{padding:0 22px;margin-top:-40px;position:relative;}
+.prof-top .av{border:4px solid rgba(17,20,28,.95);background:var(--bg-3);}
+.prof-name{font-size:22px;font-weight:700;margin-top:11px;word-break:break-word;}
+.prof-handle{font-size:13px;color:var(--text-3);margin-top:1px;}
+.prof-status{
+  display:inline-flex;align-items:center;gap:7px;margin-top:11px;padding:6px 11px;border-radius:9px;
+  background:var(--glass);border:1px solid var(--hair);font-size:12.5px;color:var(--text-2);
+}
+.prof-sec{margin-top:19px;}
+.prof-sec h5{
+  font-size:10.5px;color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;
+  margin:0 0 7px;font-weight:700;
+}
+.prof-bio{font-size:13.5px;line-height:1.62;color:var(--text-2);white-space:pre-wrap;word-break:break-word;}
+.linkrow{
+  display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:10px;
+  background:var(--glass);border:1px solid var(--hair);margin-bottom:6px;
+}
+.linkrow .g{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;font-weight:600;}
+.linkrow .h{font-size:13.5px;font-weight:600;}
+.linkrow .vis{font-size:10px;color:var(--text-3);}
+.rel-actions{display:flex;gap:8px;margin-top:17px;flex-wrap:wrap;}
+
+/* notifications */
+.nrow{
+  display:flex;gap:11px;padding:12px 13px;border-radius:12px;background:var(--glass);
+  border:1px solid var(--hair);margin-bottom:8px;position:relative;
+}
+.nrow.unseen{border-color:rgba(224,168,92,.32);background:rgba(224,168,92,.055);}
+.nrow .nic{
+  width:33px;height:33px;border-radius:10px;flex:none;display:grid;place-items:center;font-size:15px;
+  background:var(--glass-2);
+}
+.nrow.sev-high .nic{background:rgba(224,106,106,.17);}
+.nrow.sev-med .nic{background:rgba(224,176,84,.17);}
+.nrow.sev-low .nic{background:rgba(91,192,172,.14);}
+.nrow .nt{font-size:13.5px;font-weight:600;margin-bottom:2px;}
+.nrow .nb{font-size:12.5px;color:var(--text-2);line-height:1.55;}
+.nrow .nw{font-size:10.5px;color:var(--text-3);margin-top:5px;}
+.nrow .nx{position:absolute;top:8px;right:9px;color:var(--text-3);font-size:14px;width:22px;height:22px;border-radius:6px;}
+.nrow .nx:hover{background:var(--glass-2);color:var(--text);}
+
+/* emoji picker */
+#emoji{
+  position:fixed;z-index:60;display:none;width:294px;max-height:262px;overflow-y:auto;
+  background:var(--bg-3);border:1px solid var(--hair-2);border-radius:14px;padding:9px;
+  box-shadow:var(--shadow-3);
+}
+#emoji.on{display:block;}
+#emoji .eg{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;}
+#emoji .eg button{height:31px;border-radius:7px;font-size:18px;}
+#emoji .eg button:hover{background:var(--glass-2);}
+#emoji .eh{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;padding:7px 4px 4px;font-weight:600;}
+
+/* toast */
+#toasts{position:fixed;z-index:80;bottom:20px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;}
+.toast{
+  padding:11px 17px;border-radius:11px;font-size:13px;max-width:440px;
+  background:rgba(24,27,38,.97);border:1px solid var(--hair-2);box-shadow:var(--shadow-2);
+  animation:rise .2s var(--ease);line-height:1.5;
+}
+.toast.bad{border-color:rgba(224,106,106,.4);color:#EFAFAF;}
+.toast.good{border-color:rgba(79,201,127,.4);color:#9BE0B8;}
+.toast.warn{border-color:rgba(224,176,84,.4);color:#E8C88A;}
+
+/* misc */
+.switch{display:flex;align-items:center;gap:10px;padding:9px 0;cursor:pointer;}
+.switch .track{width:38px;height:21px;border-radius:11px;background:var(--bg-4);position:relative;flex:none;transition:background .18s;}
+.switch .track i{position:absolute;top:2.5px;left:2.5px;width:16px;height:16px;border-radius:50%;background:var(--text-3);transition:transform .18s var(--ease),background .18s;}
+.switch.on .track{background:rgba(224,168,92,.35);}
+.switch.on .track i{transform:translateX(17px);background:var(--amber);}
+.switch .sl{flex:1;font-size:13px;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.stack{display:flex;flex-direction:column;gap:9px;}
+.inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.name-preview{
+  padding:13px;border-radius:11px;background:rgba(0,0,0,.3);border:1px solid var(--hair);
+  text-align:center;font-size:22px;font-weight:700;word-break:break-word;
+}
+.meter{height:5px;border-radius:3px;background:var(--bg-4);overflow:hidden;margin-top:7px;}
+.meter i{display:block;height:100%;width:0;background:var(--danger);transition:width .25s,background .25s;}
+.reqrow{display:flex;align-items:center;gap:11px;padding:10px;border-radius:11px;background:var(--glass);border:1px solid var(--hair);margin-bottom:7px;}
+.reqrow .txt{flex:1;min-width:0;}
+.reqrow .n{font-size:13.5px;font-weight:600;}
+.reqrow .u{font-size:11.5px;color:var(--text-3);}
+.mini{font-size:11.5px;padding:6px 11px;border-radius:8px;}
+kbd{
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:1.5px 5px;border-radius:5px;
+  background:rgba(0,0,0,.4);border:1px solid var(--hair);color:var(--text-3);
+}
+
+#sideToggle{display:none;}
+@media (max-width:760px){
+  #side{position:fixed;top:50px;bottom:0;left:0;z-index:30;transform:translateX(-101%);transition:transform .22s var(--ease);box-shadow:var(--shadow-3);}
+  #side.open{transform:none;}
+  #sideToggle{display:grid;}
+  #msgs{padding:14px 12px 6px;}
+  #composer{padding:0 11px 12px;}
+  #chatbar{padding:0 12px;}
+  .m .gutter{width:0;display:none;}
+  .top-brand .name{display:none;}
+  .sheet{max-height:92vh;}
+}
 </style>
 </head>
 <body>
+<div id="aurora"><span></span><span></span><span></span></div>
+<div id="grain"></div>
 
-<!-- ============ LOGIN ============ -->
-<div id="login-screen">
-  <div class="login-card">
-    <h1 class="brand">Wire</h1>
-    <p class="sub">A private line. Enter the username and passwoooord you were given — no account creation here.</p>
-    <form id="login-form">
+<!-- ===================== LOGIN ===================== -->
+<div id="login">
+  <div class="card">
+    <div class="logo-row">
+      <div class="logo-mark">🦊</div>
+      <h1 class="display">Foxie</h1>
+    </div>
+    <p class="sub">A closed, invite-only line. Enter the handle and password you were given — there is no sign-up here.</p>
+    <form id="loginForm" autocomplete="on">
       <div class="field">
-        <label for="username">Username</label>
-        <input type="text" id="username" autocomplete="username" required />
+        <label for="lgUser">Handle</label>
+        <input class="inp" type="text" id="lgUser" autocomplete="username" autocapitalize="none" spellcheck="false" required />
       </div>
       <div class="field">
-        <label for="password">Password</label>
-        <input type="password" id="password" autocomplete="current-password" required />
+        <label for="lgPass">Password</label>
+        <input class="inp" type="password" id="lgPass" autocomplete="current-password" required />
       </div>
-      <button type="submit" class="btn-primary" id="login-btn">Log in</button>
-      <div id="login-error"></div>
+      <button type="submit" class="btn btn-primary" id="lgBtn">Enter</button>
+      <div class="note err" id="lgNote"></div>
     </form>
   </div>
 </div>
 
-<!-- ============ APP ============ -->
-<div id="app-screen">
-  <div id="sidebar">
-    <div id="sidebar-header">
-      <div class="wordmark brand">Wire</div>
-      <div class="me" id="me-label"></div>
+<!-- ===================== APP ===================== -->
+<div id="app">
+  <div id="topbar">
+    <button class="tbtn" id="sideToggle" title="Menu">☰</button>
+    <div class="top-brand">
+      <div class="logo-mark">🦊</div>
+      <div class="name display">Foxie</div>
     </div>
-    <div id="room-list">
-      <div class="section-label">Channel</div>
-      <div class="room-item everyone active" data-room="everyone">
-        <span class="room-dot"></span> Everyone
-      </div>
-      <div class="section-label">Direct</div>
-      <div id="dm-list"></div>
-    </div>
-    <button id="logout-btn">Log out</button>
+    <div class="spacer"></div>
+    <button class="tbtn" id="btnReq" title="Follow requests">👥<span class="badge amber" id="bReq" style="display:none">0</span></button>
+    <button class="tbtn" id="btnNotif" title="Notifications">🔔<span class="badge" id="bNotif" style="display:none">0</span></button>
+    <button class="tbtn" id="btnPrivacy" title="Privacy centre">🛡<span class="badge" id="bPriv" style="display:none">0</span></button>
+    <button class="tbtn" id="btnLogs" title="Activity log">📜</button>
+    <button class="tbtn" id="btnSettings" title="Settings">⚙</button>
   </div>
 
-  <div id="main">
-    <div id="chat-header">
-      <button id="sidebar-toggle">&#9776;</button>
-      <div>
-        <div class="room-name" id="room-name">Everyone</div>
-        <div class="room-meta" id="room-meta">Visible to everyone signed in</div>
+  <div id="body">
+    <div id="side">
+      <div id="side-scroll">
+        <div class="sec">Channel</div>
+        <div class="row active" id="rowEveryone" data-room="everyone">
+          <div class="hash">#</div>
+          <div class="label">everyone</div>
+          <div class="pill" id="pillEveryone" style="display:none">0</div>
+        </div>
+        <div class="sec">Direct <button id="btnFind" title="Find people">＋</button></div>
+        <div id="dmList"></div>
+        <div class="empty-hint" id="dmHint">No conversations yet. Tap ＋ to find people — you both need to follow each other before a DM opens.</div>
+      </div>
+      <div id="me-bar">
+        <div class="av" id="meAv"><div class="dot on"></div></div>
+        <div class="txt">
+          <div class="n" id="meName">—</div>
+          <div class="u" id="meHandle">—</div>
+        </div>
+        <button class="tbtn" id="btnLogout" title="Log out" style="width:29px;height:29px;font-size:13px">⏻</button>
       </div>
     </div>
-    <div id="messages"><div id="empty-state">No messages yet. Say something.</div></div>
-    <form id="compose">
-      <textarea id="msg-input" rows="1" placeholder="Message…" required></textarea>
-      <button type="submit" id="send-btn">Send</button>
-    </form>
+
+    <div id="main">
+      <div id="chatbar">
+        <div class="ident" id="chatIdent">
+          <div class="hash" id="chatAv">#</div>
+          <div style="min-width:0">
+            <div id="chat-title">everyone</div>
+            <div id="chat-sub">Open channel</div>
+          </div>
+        </div>
+        <div class="spacer"></div>
+        <span class="lock-chip open" id="lockChip">⚠ Not encrypted</span>
+      </div>
+
+      <div id="msgs"><div class="stub">Loading…</div></div>
+      <div id="typing"></div>
+
+      <div id="composer">
+        <div id="compose-shell">
+          <div id="fmtbar">
+            <button class="fbtn b" data-cmd="bold" title="Bold">B</button>
+            <button class="fbtn i" data-cmd="italic" title="Italic">I</button>
+            <button class="fbtn u" data-cmd="underline" title="Underline">U</button>
+            <button class="fbtn s" data-cmd="strikeThrough" title="Strikethrough">S</button>
+            <div class="fsep"></div>
+            <select class="fmt-select" id="fmtFont" title="Font"></select>
+            <select class="fmt-select" id="fmtSize" title="Size" style="max-width:64px">
+              <option value="1">S</option>
+              <option value="2" selected>M</option>
+              <option value="3">L</option>
+            </select>
+            <input type="color" class="swatch" id="fmtColor" value="#E8E6E1" title="Text colour" />
+            <button class="fbtn" id="fmtClear" title="Clear formatting">⨯</button>
+            <div class="fsep"></div>
+            <button class="fbtn" id="btnEmoji" title="Emoji">🙂</button>
+            <button class="fbtn" id="btnFile" title="Send a file via Wormhole">📎</button>
+          </div>
+          <div id="editor" contenteditable="true" data-ph="Write something…" spellcheck="true"></div>
+          <div id="compose-foot">
+            <div class="hint"><kbd>Enter</kbd> send · <kbd>Shift</kbd>+<kbd>Enter</kbd> newline</div>
+            <button id="send">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<div id="emoji"></div>
+<div id="toasts"></div>
+<div class="scrim" id="scrim"><div id="sheetHost"></div></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import {
   getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
-  setPersistence, browserLocalPersistence
+  setPersistence, browserLocalPersistence, updatePassword,
+  EmailAuthProvider, reauthenticateWithCredential
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 import {
-  getFirestore, collection, doc, setDoc, addDoc, query, orderBy,
-  limitToLast, onSnapshot, serverTimestamp
+  getFirestore, collection, doc, getDoc, setDoc,
+  addDoc, updateDoc, deleteDoc, query, where, orderBy, limitToLast, limit,
+  onSnapshot, serverTimestamp, deleteField, writeBatch, Timestamp
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
-/* =========================================================
-   1. FIREBASE CONFIG — replace with YOUR project's config.
-      Get this from: Firebase Console → Project settings →
-      General → "Your apps" → Web app → SDK setup snippet.
-      These values are not secret — access is controlled by
-      Auth + Firestore rules, not by hiding this config.
-   ========================================================= */
+/* ===================================================================
+   FIREBASE CONFIG — paste yours from
+   Firebase Console → Project settings → General → Your apps → Web.
+   These are NOT secrets. Access is enforced by Auth + Firestore rules.
+   =================================================================== */
 const firebaseConfig = {
-  apiKey: "AIzaSyBMpirq3Cdrg8EQ45yb2BlJ4U4Xrt32k8c",
-  authDomain: "free-chat-interface.firebaseapp.com",
-  projectId: "free-chat-interface",
-  storageBucket: "free-chat-interface.firebasestorage.app",
-  messagingSenderId: "913944928105",
-  appId: "1:913944928105:web:05f7aa0557e30668e867f8"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
-const EMAIL_SUFFIX = "@wire.local"; // fake email domain so usernames work with Firebase Auth
+const EMAIL_SUFFIX = "@wire.local";  // keep as-is if you already created accounts with the old script
+const HEARTBEAT_MS   = 60000;   // presence ping (see README quota maths)
+const ONLINE_WINDOW  = 105000;  // treat as online if seen within this
+const TYPING_THROTTLE= 4000;
+const TYPING_TTL     = 7000;
+const MSG_WINDOW     = 300;     // messages loaded per room
+const AVATAR_PX      = 96;
 
-const app = initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
-await setPersistence(auth, browserLocalPersistence);
+const db   = getFirestore(app);
 
-/* ---------- DOM refs ---------- */
-const loginScreen = document.getElementById('login-screen');
-const appScreen = document.getElementById('app-screen');
-const loginForm = document.getElementById('login-form');
-const loginBtn = document.getElementById('login-btn');
-const loginError = document.getElementById('login-error');
-const meLabel = document.getElementById('me-label');
-const dmList = document.getElementById('dm-list');
-const roomNameEl = document.getElementById('room-name');
-const roomMetaEl = document.getElementById('room-meta');
-const messagesEl = document.getElementById('messages');
-const composeForm = document.getElementById('compose');
-const msgInput = document.getElementById('msg-input');
-const sendBtn = document.getElementById('send-btn');
-const logoutBtn = document.getElementById('logout-btn');
-const sidebar = document.getElementById('sidebar');
-const sidebarToggle = document.getElementById('sidebar-toggle');
-const everyoneItem = document.querySelector('.room-item.everyone');
+/* ===================== tiny helpers ===================== */
+const $  = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const el = (tag, cls, txt) => { const n=document.createElement(tag); if(cls)n.className=cls; if(txt!=null)n.textContent=txt; return n; };
+const esc = s => String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nowMs = () => Date.now();
+const tsMs = t => (t && typeof t.toMillis === 'function') ? t.toMillis() : 0;
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
 
-let currentUid = null;
-let currentUsername = null;
-let currentRoom = { type: 'everyone', id: 'everyone', label: 'Everyone' };
-let unsubMessages = null;
-let unsubUsers = null;
-let knownUsers = {}; // uid -> username
+function toast(msg, kind='', ms=4200){
+  const t = el('div','toast '+kind, msg);
+  $('#toasts').appendChild(t);
+  setTimeout(()=>{ t.style.transition='opacity .3s'; t.style.opacity='0'; setTimeout(()=>t.remove(),320); }, ms);
+}
+function fmtTime(ms){
+  if(!ms) return '';
+  return new Date(ms).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+}
+function fmtDay(ms){
+  const d=new Date(ms), t=new Date();
+  const same=(a,b)=>a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();
+  if(same(d,t)) return 'Today';
+  const y=new Date(t.getTime()-864e5);
+  if(same(d,y)) return 'Yesterday';
+  return d.toLocaleDateString([], {weekday:'short', day:'numeric', month:'short', year: d.getFullYear()===t.getFullYear()?undefined:'numeric'});
+}
+function fmtLeft(ms){
+  if(ms<=0) return 'expired';
+  const m=Math.floor(ms/60000), h=Math.floor(m/60), d=Math.floor(h/24);
+  if(d>0) return d+'d '+(h%24)+'h left';
+  if(h>0) return h+'h '+(m%60)+'m left';
+  return Math.max(1,m)+'m left';
+}
+const b64  = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const unb64= s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
 
-/* ---------- Auth ---------- */
-loginForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  loginError.textContent = '';
-  loginBtn.disabled = true;
-  const username = document.getElementById('username').value.trim().toLowerCase();
-  const password = document.getElementById('password').value;
-  try {
-    await signInWithEmailAndPassword(auth, username + EMAIL_SUFFIX, password);
-  } catch (err) {
-    console.error(err.code, err.message);
-    loginError.textContent = 'Wrong username or password. Ask whoever set up Wire for access.';
-  } finally {
-    loginBtn.disabled = false;
-  }
-});
+/* ===================== fonts ===================== */
+const FONTS = [
+  ['Inter','Inter'],['Fraunces','Fraunces'],['JetBrains Mono','JetBrains Mono'],
+  ['Playfair Display','Playfair Display'],['Space Grotesk','Space Grotesk'],
+  ['Cinzel','Cinzel'],['Lobster','Lobster'],['Bebas Neue','Bebas Neue'],
+  ['Caveat','Caveat'],['Orbitron','Orbitron'],['Righteous','Righteous'],
+  ['Pacifico','Pacifico'],['VT323','VT323'],['Cormorant Garamond','Cormorant Garamond'],
+  ['Oswald','Oswald'],['Raleway','Raleway'],['Merriweather','Merriweather'],
+  ['Comfortaa','Comfortaa'],['Abril Fatface','Abril Fatface'],['Sora','Sora'],
+  ['Silkscreen','Silkscreen'],['Georgia','Georgia, serif'],['Courier New','Courier New, monospace']
+];
+const fontStack = n => { const f=FONTS.find(x=>x[0]===n); return f?`'${f[1]}', sans-serif`:`'Inter', sans-serif`; };
 
-logoutBtn.addEventListener('click', () => signOut(auth));
+const EMOJI = {
+  'Reactions':['👍','👎','❤️','🔥','😂','😮','😢','🎉','👀','🙏','💯','✅'],
+  'Faces':['😀','😄','😊','🙂','😉','😍','🥰','😘','🤗','🤔','🤨','😐','😑','🙄','😴','😭','😤','😡','🥳','🤯','😇','🤓','😎','🥲'],
+  'Hands':['👋','🤝','✌️','🤞','👌','🤌','👏','🙌','💪','🫶','🤙','☝️'],
+  'Things':['⭐','🌙','☀️','⚡','🌊','🍀','🌸','🎮','🎧','📌','🔒','🦊','🐺','🐱','🍕','☕','🎂','🏆','💎','🚀','📎','🛡']
+};
 
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    currentUid = user.uid;
-    currentUsername = user.email.replace(EMAIL_SUFFIX, '');
-    meLabel.textContent = 'Signed in as ' + currentUsername;
-    loginScreen.style.display = 'none';
-    appScreen.classList.add('visible');
-    try {
-      await setDoc(doc(db, 'users', currentUid), { username: currentUsername }, { merge: true });
-    } catch (err) {
-      console.error('Could not refresh user profile doc:', err);
-      // Non-fatal: continue anyway, since the admin script already created
-      // this doc when the account was made.
-    }
-    watchUserList();
-    openRoom({ type: 'everyone', id: 'everyone', label: 'Everyone' });
-  } else {
-    currentUid = null;
-    appScreen.classList.remove('visible');
-    loginScreen.style.display = 'flex';
-    if (unsubMessages) unsubMessages();
-    if (unsubUsers) unsubUsers();
-    dmList.innerHTML = '';
-  }
-});
-
-/* ---------- User directory (for starting DMs) ---------- */
-function watchUserList() {
-  const q = query(collection(db, 'users'));
-  unsubUsers = onSnapshot(q, (snap) => {
-    knownUsers = {};
-    dmList.innerHTML = '';
-    snap.forEach((d) => {
-      if (d.id === currentUid) return;
-      const username = d.data().username;
-      knownUsers[d.id] = username;
-      const el = document.createElement('div');
-      el.className = 'room-item';
-      el.dataset.uid = d.id;
-      el.innerHTML = `<span class="room-dot" style="background:#9199A6"></span> ${escapeHtml(username)}`;
-      el.addEventListener('click', () => {
-        const threadId = [currentUid, d.id].sort().join('_');
-        openRoom({ type: 'dm', id: threadId, label: username, otherUid: d.id });
-      });
-      dmList.appendChild(el);
-    });
-    highlightActiveRoom();
+/* ===================== IndexedDB (private key at rest) ===================== */
+const IDB_NAME='foxie-keys', IDB_STORE='k';
+function idbOpen(){
+  return new Promise((res,rej)=>{
+    let rq;
+    try{ rq = indexedDB.open(IDB_NAME,1); }catch(e){ return rej(e); }
+    rq.onupgradeneeded = () => { try{ rq.result.createObjectStore(IDB_STORE); }catch(e){} };
+    rq.onsuccess = () => res(rq.result);
+    rq.onerror = () => rej(rq.error);
   });
 }
-
-everyoneItem.addEventListener('click', () => {
-  openRoom({ type: 'everyone', id: 'everyone', label: 'Everyone' });
-});
-
-sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
-
-function highlightActiveRoom() {
-  document.querySelectorAll('.room-item').forEach((el) => el.classList.remove('active'));
-  if (currentRoom.type === 'everyone') {
-    everyoneItem.classList.add('active');
-  } else {
-    const el = dmList.querySelector(`[data-uid="${currentRoom.otherUid}"]`);
-    if (el) el.classList.add('active');
-  }
+async function idbPut(key,val){
+  try{
+    const d=await idbOpen();
+    await new Promise((res,rej)=>{ const tx=d.transaction(IDB_STORE,'readwrite'); tx.objectStore(IDB_STORE).put(val,key); tx.oncomplete=res; tx.onerror=()=>rej(tx.error); });
+    d.close();
+  }catch(e){ /* non-fatal: we simply re-prompt for the password */ }
+}
+async function idbGet(key){
+  try{
+    const d=await idbOpen();
+    const v=await new Promise((res,rej)=>{ const tx=d.transaction(IDB_STORE,'readonly'); const r=tx.objectStore(IDB_STORE).get(key); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); });
+    d.close(); return v;
+  }catch(e){ return undefined; }
+}
+async function idbDel(key){
+  try{
+    const d=await idbOpen();
+    await new Promise((res)=>{ const tx=d.transaction(IDB_STORE,'readwrite'); tx.objectStore(IDB_STORE).delete(key); tx.oncomplete=res; tx.onerror=res; });
+    d.close();
+  }catch(e){}
 }
 
-/* ---------- Rooms & messages ---------- */
-async function openRoom(room) {
-  currentRoom = room;
-  sidebar.classList.remove('open');
-  roomNameEl.textContent = room.label;
-  roomMetaEl.textContent = room.type === 'everyone'
-    ? 'Visible to everyone signed in'
-    : 'Private — only you and ' + room.label;
-  highlightActiveRoom();
+/* ===================== E2EE (DMs only) =====================
+   ECDH P-256 per user. Public key published in users/{uid}.
+   Private key is wrapped with AES-GCM using a key derived from the
+   user's password (PBKDF2-SHA256, 310k iters) and stored wrapped.
+   Unwrapped key is cached in IndexedDB as a NON-EXTRACTABLE CryptoKey,
+   so a page refresh does not require the password again, and script
+   running on the page still cannot read the raw private bytes.
+   ========================================================== */
+const SUBTLE = (globalThis.crypto && globalThis.crypto.subtle) ? globalThis.crypto.subtle : null;
+const PBKDF2_ITERS = 310000;
 
-  if (unsubMessages) unsubMessages();
-  messagesEl.innerHTML = '';
+async function deriveWrapKey(password, salt){
+  const base = await SUBTLE.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+  return SUBTLE.deriveKey(
+    {name:'PBKDF2', salt, iterations:PBKDF2_ITERS, hash:'SHA-256'},
+    base, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']
+  );
+}
+async function generateIdentity(password){
+  const kp = await SUBTLE.generateKey({name:'ECDH', namedCurve:'P-256'}, true, ['deriveKey','deriveBits']);
+  const pubJwk  = await SUBTLE.exportKey('jwk', kp.publicKey);
+  const privJwk = await SUBTLE.exportKey('jwk', kp.privateKey);
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv   = crypto.getRandomValues(new Uint8Array(12));
+  const wrapKey = await deriveWrapKey(password, salt);
+  const ct = await SUBTLE.encrypt({name:'AES-GCM', iv}, wrapKey, new TextEncoder().encode(JSON.stringify(privJwk)));
+  // re-import privately as non-extractable for in-memory use
+  const priv = await SUBTLE.importKey('jwk', privJwk, {name:'ECDH', namedCurve:'P-256'}, false, ['deriveKey','deriveBits']);
+  return { pubJwk, wrapped:{ ct:b64(ct), iv:b64(iv), salt:b64(salt), v:1 }, priv };
+}
+async function unwrapIdentity(wrapped, password){
+  const wrapKey = await deriveWrapKey(password, unb64(wrapped.salt));
+  const plain = await SUBTLE.decrypt({name:'AES-GCM', iv:unb64(wrapped.iv)}, wrapKey, unb64(wrapped.ct));
+  const jwk = JSON.parse(new TextDecoder().decode(plain));
+  return SUBTLE.importKey('jwk', jwk, {name:'ECDH', namedCurve:'P-256'}, false, ['deriveKey','deriveBits']);
+}
+async function rewrapIdentity(privKeyExportableJwk, newPassword){
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv   = crypto.getRandomValues(new Uint8Array(12));
+  const wrapKey = await deriveWrapKey(newPassword, salt);
+  const ct = await SUBTLE.encrypt({name:'AES-GCM', iv}, wrapKey, new TextEncoder().encode(JSON.stringify(privKeyExportableJwk)));
+  return { ct:b64(ct), iv:b64(iv), salt:b64(salt), v:1 };
+}
+async function sharedKeyWith(pubJwk, myPriv){
+  const pub = await SUBTLE.importKey('jwk', pubJwk, {name:'ECDH', namedCurve:'P-256'}, false, []);
+  return SUBTLE.deriveKey({name:'ECDH', public:pub}, myPriv, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+}
+async function encWith(key, text){
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await SUBTLE.encrypt({name:'AES-GCM', iv}, key, new TextEncoder().encode(text));
+  return { ct:b64(ct), iv:b64(iv) };
+}
+async function decWith(key, packed){
+  const pt = await SUBTLE.decrypt({name:'AES-GCM', iv:unb64(packed.iv)}, key, unb64(packed.ct));
+  return new TextDecoder().decode(pt);
+}
 
-  let messagesRef;
-  if (room.type === 'everyone') {
-    messagesRef = collection(db, 'rooms', 'everyone', 'messages');
-  } else {
-    // ensure the DM thread doc exists / has both participants
-    await setDoc(doc(db, 'dms', room.id), {
-      participants: [currentUid, room.otherUid].sort(),
-    }, { merge: true });
-    messagesRef = collection(db, 'dms', room.id, 'messages');
+/* ===================== app state ===================== */
+const S = {
+  uid:null, me:null, sessionPassword:null,
+  priv:null, shared:new Map(),
+  profiles:new Map(),
+  following:new Set(), followers:new Set(),
+  reqIn:[], reqOut:[],
+  threads:new Map(),
+  reads:{}, room:{type:'everyone', id:'everyone'},
+  unsub:{}, unreadCounts:{}, roomReadMark:0,
+  notifs:[], privacyFlags:new Map(), typingTimers:new Map(), lastTypingWrite:0,
+  logs:[], msgCache:[], everyoneCache:[], booted:false
+};
+function logLocal(kind, detail){
+  S.logs.unshift({kind, detail, at:nowMs()});
+  if(S.logs.length>200) S.logs.pop();
+}
+
+/* ===================== AUTH ===================== */
+await setPersistence(auth, browserLocalPersistence).catch(()=>{});
+
+$('#loginForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const note=$('#lgNote'); note.className='note err'; note.textContent='';
+  const btn=$('#lgBtn'); btn.disabled=true;
+  const handle=$('#lgUser').value.trim().toLowerCase();
+  const pass=$('#lgPass').value;
+  try{
+    // handle -> login email (handles are changeable; the login email is not)
+    let loginEmail = handle + EMAIL_SUFFIX;
+    try{
+      const hs = await getDoc(doc(db,'usernames',handle));
+      if(hs.exists() && hs.data().loginEmail) loginEmail = hs.data().loginEmail;
+    }catch(_){ /* fall back to direct suffix */ }
+    S.sessionPassword = pass;
+    await signInWithEmailAndPassword(auth, loginEmail, pass);
+    $('#lgPass').value='';
+  }catch(err){
+    S.sessionPassword=null;
+    note.textContent = (err && err.code==='auth/too-many-requests')
+      ? 'Too many attempts. Wait a few minutes and try again.'
+      : 'That handle and password combination was not accepted.';
+  }finally{ btn.disabled=false; }
+});
+
+$('#btnLogout').addEventListener('click', async ()=>{
+  if(!confirm('Log out of Foxie on this device?\n\nYour encrypted DM key stays on this device unless you clear browser data.')) return;
+  try{ await updateDoc(doc(db,'users',S.uid), {online:false, lastSeen:serverTimestamp()}); }catch(_){}
+  await signOut(auth);
+  location.reload();
+});
+
+onAuthStateChanged(auth, async user=>{
+  if(!user){ $('#login').style.display='flex'; $('#app').classList.remove('on'); return; }
+  S.uid = user.uid;
+  $('#login').style.display='none';
+  $('#app').classList.add('on');
+  if(!S.booted){ S.booted=true; await boot(); }
+});
+
+/* ===================== BOOT ===================== */
+async function boot(){
+  runEnvironmentPrivacyChecks();
+
+  // my profile doc (created by the admin script)
+  const meRef = doc(db,'users',S.uid);
+  let meSnap = await getDoc(meRef);
+  if(!meSnap.exists()){
+    toast('Your profile record is missing. Ask the owner to re-run the admin script.','bad',9000);
+    return;
   }
+  S.me = { uid:S.uid, ...meSnap.data() };
 
-  const q = query(messagesRef, orderBy('createdAt', 'asc'), limitToLast(300));
-  unsubMessages = onSnapshot(q, (snap) => {
-    messagesEl.innerHTML = '';
-    if (snap.empty) {
-      const empty = document.createElement('div');
-      empty.id = 'empty-state';
-      empty.textContent = 'No messages yet. Say something.';
-      messagesEl.appendChild(empty);
+  // establish / restore the E2EE identity
+  await ensureIdentity(meRef);
+
+  paintMe();
+  watchProfiles();
+  watchFollows();
+  watchRequests();
+  watchThreads();
+  watchEveryone();
+  watchNotifications();
+  watchUserState();
+  startPresence();
+  buildFontPickers();
+  buildEmojiPicker();
+  openRoom({type:'everyone', id:'everyone'});
+  scanProfilePrivacy();
+}
+
+async function ensureIdentity(meRef){
+  if(!SUBTLE){
+    flagPrivacy('no-subtle','high','Encryption unavailable',
+      'This browser did not expose Web Crypto, which almost always means the page is being served over plain HTTP instead of HTTPS. Direct messages cannot be encrypted here.');
+    return;
+  }
+  // 1. cached non-extractable key from a previous session on this device
+  const cached = await idbGet('priv:'+S.uid);
+  if(cached){
+    S.priv = cached;
+    return;
+  }
+  // 2. no identity published yet -> create one (needs the password we just used)
+  if(!S.me.publicKey || !S.me.wrappedPrivateKey){
+    if(!S.sessionPassword){ promptUnlock('Set up encryption'); return; }
+    const id = await generateIdentity(S.sessionPassword);
+    await updateDoc(meRef, { publicKey:id.pubJwk, wrappedPrivateKey:id.wrapped, keyCreatedAt:serverTimestamp() });
+    S.me.publicKey = id.pubJwk; S.me.wrappedPrivateKey = id.wrapped;
+    S.priv = id.priv;
+    await idbPut('priv:'+S.uid, id.priv);
+    logLocal('crypto','Generated a new encryption identity');
+    return;
+  }
+  // 3. identity exists -> unwrap with the session password
+  if(S.sessionPassword){
+    try{
+      S.priv = await unwrapIdentity(S.me.wrappedPrivateKey, S.sessionPassword);
+      await idbPut('priv:'+S.uid, S.priv);
+      return;
+    }catch(e){ /* fall through to prompt */ }
+  }
+  promptUnlock('Unlock your messages');
+}
+
+function promptUnlock(title){
+  openSheet(title, `
+    <p class="help">Your direct messages are encrypted with a key that only your password can open. This device does not have that key cached, so enter your password once to unlock them.</p>
+    <div class="field" style="margin-top:14px">
+      <label>Password</label>
+      <input class="inp" type="password" id="ulPass" autocomplete="current-password" />
+    </div>
+    <div class="note err" id="ulNote"></div>
+  `, [
+    {label:'Skip for now', cls:'btn-ghost', act:close=>{ close(); toast('DMs will stay locked until you unlock them from Settings.','warn',6000); }},
+    {label:'Unlock', cls:'btn-primary', keep:true, act:async (close, host)=>{
+      const p = $('#ulPass', host).value; const n=$('#ulNote', host);
+      try{
+        S.priv = await unwrapIdentity(S.me.wrappedPrivateKey, p);
+        await idbPut('priv:'+S.uid, S.priv);
+        n.className='note ok'; n.textContent='Unlocked.';
+        S.shared.clear(); _decCache.clear();
+        setTimeout(()=>{ close(); if(S.room.type==='dm') openRoom(S.room); }, 500);
+      }catch(e){ n.className='note err'; n.textContent='Wrong password — the key would not open.'; }
+    }}
+  ]);
+}
+
+/* ===================== PROFILES + PRESENCE ===================== */
+function watchProfiles(){
+  S.unsub.profiles = onSnapshot(collection(db,'users'), snap=>{
+    snap.forEach(d=>{
+      const p = { uid:d.id, ...d.data() };
+      S.profiles.set(d.id, p);
+      if(d.id===S.uid){ S.me = {...S.me, ...p}; paintMe(); }
+    });
+    renderDmList(); renderChatbar(); refreshOpenProfile();
+  }, err=>toast('Profile sync error: '+err.code,'bad'));
+}
+const prof = uid => S.profiles.get(uid) || {uid, username:'unknown', displayName:null};
+const shownName = uid => { const p=prof(uid); return (p.displayName && p.displayName.trim()) ? p.displayName : ('@'+(p.username||'unknown')); };
+const isOnline = uid => { const p=prof(uid); return !!(p.online && (nowMs() - tsMs(p.lastSeen)) < ONLINE_WINDOW); };
+
+function avatarNode(uid, size=''){
+  const p = prof(uid);
+  const n = el('div','av '+size);
+  if(p.photo){ const i=el('img'); i.src=p.photo; i.alt=''; n.appendChild(i); }
+  else { n.textContent = (shownName(uid).replace(/^@/,'')[0]||'?').toUpperCase(); }
+  const d = el('div','dot'+(isOnline(uid)?' on':''));
+  n.appendChild(d);
+  return n;
+}
+function nameNode(uid, tag='span'){
+  const p = prof(uid);
+  const n = el(tag,'who', shownName(uid));
+  n.style.fontFamily = fontStack(p.nameFont||'Inter');
+  n.style.color = p.nameColor || 'var(--text)';
+  n.addEventListener('click', e=>{ e.stopPropagation(); openProfile(uid); });
+  return n;
+}
+function paintMe(){
+  const fresh=avatarNode(S.uid); fresh.id='meAv';
+  $('#meAv').replaceWith(fresh);
+  $('#meName').textContent = shownName(S.uid);
+  $('#meName').style.fontFamily = fontStack(S.me.nameFont||'Inter');
+  $('#meName').style.color = S.me.nameColor||'var(--text)';
+  $('#meHandle').textContent = '@'+(S.me.username||'');
+}
+function startPresence(){
+  const ping = async ()=>{
+    if(document.hidden) return;
+    try{ await updateDoc(doc(db,'users',S.uid), {online:true, lastSeen:serverTimestamp()}); }catch(_){}
+  };
+  ping();
+  setInterval(ping, HEARTBEAT_MS);
+  setInterval(()=>{ renderDmList(); renderChatbar(); }, 20000);
+  window.addEventListener('beforeunload', ()=>{
+    try{ updateDoc(doc(db,'users',S.uid), {online:false}); }catch(_){}
+  });
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) ping(); });
+}
+
+/* ===================== FOLLOWS + REQUESTS ===================== */
+function watchFollows(){
+  S.unsub.fw1 = onSnapshot(query(collection(db,'follows'), where('from','==',S.uid)), snap=>{
+    S.following = new Set(snap.docs.map(d=>d.data().to));
+    renderDmList(); refreshOpenProfile();
+  });
+  S.unsub.fw2 = onSnapshot(query(collection(db,'follows'), where('to','==',S.uid)), snap=>{
+    S.followers = new Set(snap.docs.map(d=>d.data().from));
+    renderDmList(); refreshOpenProfile();
+  });
+}
+const isMutual = uid => S.following.has(uid) && S.followers.has(uid);
+
+function watchRequests(){
+  S.unsub.rq1 = onSnapshot(query(collection(db,'followRequests'), where('to','==',S.uid)), snap=>{
+    S.reqIn = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    const b=$('#bReq'); b.style.display = S.reqIn.length?'grid':'none'; b.textContent=S.reqIn.length;
+    refreshOpenProfile();
+  });
+  S.unsub.rq2 = onSnapshot(query(collection(db,'followRequests'), where('from','==',S.uid)), snap=>{
+    S.reqOut = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    refreshOpenProfile();
+  });
+}
+async function sendFollowRequest(uid){
+  if(uid===S.uid) return;
+  await setDoc(doc(db,'followRequests', S.uid+'_'+uid), {from:S.uid, to:uid, createdAt:serverTimestamp()});
+  await pushNotif(uid,'follow','New follow request', shownName(S.uid)+' asked to follow you.','low');
+  toast('Request sent.','good');
+  logLocal('social','Follow request sent to @'+prof(uid).username);
+}
+async function cancelFollowRequest(uid){
+  await deleteDoc(doc(db,'followRequests', S.uid+'_'+uid));
+  toast('Request withdrawn.');
+}
+async function acceptFollowRequest(fromUid){
+  await setDoc(doc(db,'follows', fromUid+'_'+S.uid), {from:fromUid, to:S.uid, createdAt:serverTimestamp()});
+  await deleteDoc(doc(db,'followRequests', fromUid+'_'+S.uid));
+  await pushNotif(fromUid,'follow','Request accepted', shownName(S.uid)+' accepted your follow request.','low');
+  toast('Accepted.','good');
+  logLocal('social','Accepted follow request from @'+prof(fromUid).username);
+}
+async function declineFollowRequest(fromUid){
+  await deleteDoc(doc(db,'followRequests', fromUid+'_'+S.uid));
+  toast('Declined.');
+}
+async function unfollow(uid){
+  await deleteDoc(doc(db,'follows', S.uid+'_'+uid));
+  toast('Unfollowed.');
+  logLocal('social','Unfollowed @'+prof(uid).username);
+}
+
+/* ===================== THREADS / UNREAD ===================== */
+const threadIdFor = uid => [S.uid, uid].sort().join('_');
+
+function watchThreads(){
+  S.unsub.threads = onSnapshot(
+    query(collection(db,'dms'), where('participants','array-contains',S.uid)),
+    snap=>{
+      S.threads.clear();
+      snap.forEach(d=>S.threads.set(d.id, {id:d.id, ...d.data()}));
+      renderDmList();
+    },
+    err=>{ if(err.code!=='permission-denied') toast('Thread sync: '+err.code,'bad'); }
+  );
+}
+function watchEveryone(){
+  S.unsub.everyone = onSnapshot(
+    query(collection(db,'rooms','everyone','messages'), orderBy('createdAt','asc'), limitToLast(MSG_WINDOW)),
+    async snap=>{
+      const rows=[]; snap.forEach(d=>rows.push({id:d.id, ...d.data()}));
+      S.everyoneCache=rows;
+      if(S.room.type==='everyone'){ await renderMessages(rows); markRead('everyone'); }
+      paintEveryonePill();
+    }, err=>{ if(err.code) console.warn('everyone listener', err.code); });
+}
+function watchUserState(){
+  S.unsub.state = onSnapshot(doc(db,'userState',S.uid), s=>{
+    S.reads = (s.exists() && s.data().reads) ? s.data().reads : {};
+    renderDmList(); paintEveryonePill();
+  });
+}
+let _lastMark={};
+async function markRead(roomId){
+  // throttled: a naive call-per-snapshot burns the daily write quota fast
+  const t=nowMs();
+  if(_lastMark[roomId] && t-_lastMark[roomId] < 8000) return;
+  _lastMark[roomId]=t;
+  try{ await setDoc(doc(db,'userState',S.uid), {reads:{[roomId]:Timestamp.fromMillis(t)}}, {merge:true}); }
+  catch(e){ /* non-fatal */ }
+}
+const readMs = roomId => tsMs(S.reads[roomId]);
+
+function unreadForThread(t){
+  const other = t.participants.find(u=>u!==S.uid);
+  const last = tsMs(t.lastMessageAt);
+  if(!last) return false;
+  if(t.lastSender===S.uid) return false;
+  return last > readMs(t.id);
+}
+function paintEveryonePill(){
+  const mark = readMs('everyone');
+  const n = S.everyoneCache.filter(m=>m.uid!==S.uid && tsMs(m.createdAt)>mark).length;
+  const pill=$('#pillEveryone');
+  pill.style.display = n>0 ? 'grid' : 'none';
+  pill.textContent = n>99?'99+':n;
+  $('#rowEveryone').classList.toggle('unread', n>0 && S.room.id!=='everyone');
+}
+
+/* ===================== SIDEBAR ===================== */
+function renderDmList(){
+  const host=$('#dmList'); if(!host) return;
+  const items=[];
+  const seen=new Set();
+  for(const t of S.threads.values()){
+    const other=t.participants.find(u=>u!==S.uid);
+    if(!other) continue;
+    seen.add(other);
+    items.push({uid:other, last:tsMs(t.lastMessageAt), unread:unreadForThread(t), tid:t.id});
+  }
+  // mutuals with no thread yet
+  for(const uid of S.following){
+    if(S.followers.has(uid) && !seen.has(uid)) items.push({uid, last:0, unread:false, tid:threadIdFor(uid)});
+  }
+  // 10: unread first, then most recent
+  items.sort((a,b)=> (b.unread-a.unread) || (b.last-a.last) || shownName(a.uid).localeCompare(shownName(b.uid)));
+
+  host.innerHTML='';
+  for(const it of items){
+    const r=el('div','row'+(it.unread?' unread':'')+(S.room.type==='dm'&&S.room.otherUid===it.uid?' active':''));
+    r.appendChild(avatarNode(it.uid));
+    const lab=el('div','label', shownName(it.uid));
+    const p=prof(it.uid);
+    lab.style.fontFamily=fontStack(p.nameFont||'Inter');
+    if(p.nameColor) lab.style.color=p.nameColor;
+    r.appendChild(lab);
+    if(it.unread) r.appendChild(el('div','pill','●'));
+    r.addEventListener('click', ()=>openRoom({type:'dm', id:it.tid, otherUid:it.uid}));
+    host.appendChild(r);
+  }
+  $('#dmHint').style.display = items.length? 'none':'block';
+}
+
+$('#rowEveryone').addEventListener('click', ()=>openRoom({type:'everyone', id:'everyone'}));
+$('#sideToggle').addEventListener('click', ()=>$('#side').classList.toggle('open'));
+$('#btnFind').addEventListener('click', openDirectory);
+
+/* ===================== ROOMS ===================== */
+async function openRoom(room){
+  S.room=room;
+  $('#side').classList.remove('open');
+  S.roomReadMark = readMs(room.id);
+  _decCache.clear();
+  if(S.unsub.msgs){ S.unsub.msgs(); S.unsub.msgs=null; }
+  if(S.unsub.typing){ S.unsub.typing(); S.unsub.typing=null; }
+  renderChatbar(); renderDmList();
+  $('#msgs').innerHTML='<div class="stub">Loading…</div>';
+
+  if(room.type==='dm'){
+    const other=room.otherUid;
+    if(!isMutual(other)){
+      $('#msgs').innerHTML='<div class="stub">You and '+esc(shownName(other))+' are not mutual follows yet.<br><br>Direct messages only open once you follow each other.</div>';
+      $('#editor').setAttribute('contenteditable','false'); $('#send').disabled=true;
       return;
     }
-    snap.forEach((d) => renderMessage(d.data(), room.type === 'everyone'));
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+    try{
+      await setDoc(doc(db,'dms',room.id), {participants:[S.uid,other].sort()}, {merge:true});
+    }catch(e){ /* may already exist */ }
+    await prepareSharedKey(other);
+  }
+  $('#editor').setAttribute('contenteditable','true'); $('#send').disabled=false;
+
+  if(room.type==='everyone'){
+    // served by the always-on listener below, so opening the channel
+    // costs no extra reads and the unread count stays live while away
+    await renderMessages(S.everyoneCache);
+    markRead('everyone');
+  }else{
+    S.unsub.msgs = onSnapshot(
+      query(collection(db,'dms',room.id,'messages'), orderBy('createdAt','asc'), limitToLast(MSG_WINDOW)),
+      async snap=>{
+        const rows=[]; snap.forEach(d=>rows.push({id:d.id, ...d.data()}));
+        S.msgCache=rows;
+        await renderMessages(rows);
+        markRead(room.id);
+      }, err=>{
+        $('#msgs').innerHTML='<div class="stub">Could not load messages.<br>'+esc(err.code||'')+'</div>';
+      });
+  }
+  watchTyping(room.id);
+}
+
+async function prepareSharedKey(other){
+  if(!SUBTLE || !S.priv) return null;
+  if(S.shared.has(other)) return S.shared.get(other);
+  const p=prof(other);
+  if(!p.publicKey){
+    flagPrivacy('nokey-'+other,'med','Peer has no encryption key',
+      shownName(other)+' has not published an encryption key yet, so messages to them cannot be end-to-end encrypted. Ask them to sign in once.');
+    return null;
+  }
+  try{
+    const k=await sharedKeyWith(p.publicKey, S.priv);
+    S.shared.set(other,k); return k;
+  }catch(e){ return null; }
+}
+
+function renderChatbar(){
+  const r=S.room;
+  const host=$('#chatAv');
+  if(r.type==='everyone'){
+    const h=el('div','hash','#'); h.id='chatAv'; host.replaceWith(h);
+    $('#chat-title').textContent='everyone';
+    $('#chat-title').style.fontFamily='Inter'; $('#chat-title').style.color='var(--text)';
+    $('#chat-sub').textContent='Open channel · everyone signed in can read this';
+    const c=$('#lockChip'); c.className='lock-chip open'; c.textContent='⚠ Not encrypted';
+  }else{
+    const a=avatarNode(r.otherUid); a.id='chatAv'; host.replaceWith(a);
+    const p=prof(r.otherUid);
+    $('#chat-title').textContent=shownName(r.otherUid);
+    $('#chat-title').style.fontFamily=fontStack(p.nameFont||'Inter');
+    $('#chat-title').style.color=p.nameColor||'var(--text)';
+    const st = p.status ? ' · '+p.status : '';
+    $('#chat-sub').textContent=(isOnline(r.otherUid)?'Online':'Offline')+st;
+    const c=$('#lockChip');
+    if(S.shared.get(r.otherUid)){ c.className='lock-chip'; c.textContent='🔒 End-to-end encrypted'; }
+    else { c.className='lock-chip open'; c.textContent='⚠ Encryption unavailable'; }
+  }
+}
+$('#chatIdent').addEventListener('click', ()=>{
+  if(S.room.type==='dm') openProfile(S.room.otherUid); else openChannelInfo();
+});
+
+/* ===================== MESSAGES ===================== */
+async function decryptRow(m){
+  if(!m.ct) return m.text || '';
+  const other=S.room.otherUid;
+  const key=S.shared.get(other) || await prepareSharedKey(other);
+  if(!key) return null;
+  try{ return await decWith(key, {ct:m.ct, iv:m.iv}); }catch(e){ return null; }
+}
+
+async function renderMessages(rows){
+  const box=$('#msgs');
+  const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 140;
+  box.innerHTML='';
+  if(!rows.length){
+    box.innerHTML='<div class="stub">Nothing here yet.<br>Start the conversation.</div>';
+    $('#typing').textContent=''; return;
+  }
+  let lastUid=null, lastAt=0, lastDay='', dividerDone=false;
+  for(const m of rows){
+    const at=tsMs(m.createdAt);
+    const day=fmtDay(at||nowMs());
+    if(day!==lastDay){
+      const d=el('div','daysep'); d.append(el('div','ln'), el('div','tag',day), el('div','ln'));
+      box.appendChild(d); lastDay=day; lastUid=null;
+    }
+    // 1. per-user unread divider
+    if(!dividerDone && S.roomReadMark && at>S.roomReadMark && m.uid!==S.uid){
+      const d=el('div','divider'); d.append(el('div','ln'), el('div','tag','Unread'), el('div','ln r'));
+      box.appendChild(d); dividerDone=true; lastUid=null;
+    }
+    const grouped = m.uid && m.uid===lastUid && (at-lastAt)<5*60000 && !m.deleted;
+    box.appendChild(await messageNode(m, grouped, at));
+    lastUid=m.deleted?null:m.uid; lastAt=at;
+  }
+  if(nearBottom) box.scrollTop=box.scrollHeight;
+}
+
+async function messageNode(m, grouped, at){
+  const wrap=el('div','m'+(grouped?' grouped':'')+(m.deleted?' tomb':''));
+  wrap.dataset.id=m.id;
+
+  const gutter=el('div','gutter');
+  if(m.deleted){ gutter.appendChild(el('div','av sm','🗑')); }
+  else if(grouped){ gutter.appendChild(el('div','stamp', fmtTime(at))); }
+  else { gutter.appendChild(avatarNode(m.uid)); }
+  wrap.appendChild(gutter);
+
+  const content=el('div','content');
+  if(!grouped && !m.deleted && m.uid){
+    const head=el('div','head');
+    head.appendChild(nameNode(m.uid));
+    head.appendChild(el('div','when', fmtTime(at)));
+    if(m.edited) head.appendChild(el('div','when','(edited)'));
+    content.appendChild(head);
+  }
+
+  const text=el('div','text');
+  if(m.deleted){
+    text.textContent='🚫 This message was deleted';
+  }else if(m.ct){
+    const env = await decryptRow2(m);           // {b, r} envelope, or null
+    if(env===null){
+      text.textContent='🔒 Encrypted — unlock your key to read this';
+      text.style.color='var(--warn)';
+    }else{
+      text.innerHTML = renderRich(env.b||'', env.r);
+    }
+  }else{
+    text.innerHTML = renderRich(m.text||'', m.rich);
+  }
+  content.appendChild(text);
+
+  if(m.file && !m.deleted) content.appendChild(fileCardNode(m.file));
+  if(!m.deleted) content.appendChild(reactionsNode(m));
+  wrap.appendChild(content);
+
+  if(!m.deleted){
+    const acts=el('div','m-actions');
+    const rb=el('button',null,'😊'); rb.title='React';
+    rb.addEventListener('click', e=>{ e.stopPropagation(); openEmojiFor(e.currentTarget, emo=>toggleReaction(m, emo)); });
+    acts.appendChild(rb);
+    if(m.uid===S.uid){
+      const db_=el('button',null,'🗑'); db_.title='Delete for everyone';
+      db_.addEventListener('click', e=>{ e.stopPropagation(); deleteMessage(m); });
+      acts.appendChild(db_);
+    }
+    wrap.appendChild(acts);
+  }
+  return wrap;
+}
+
+/* rich text: body is the plain concatenation, m.rich is a FLAT list of runs
+   [{t,b,i,u,st,f,sz,c}] — flat runs cannot overlap, so the produced HTML
+   can never be malformed the way nested range markers can be. */
+function renderRich(body, rich){
+  if(!rich || !Array.isArray(rich) || !rich.length){
+    return linkify(esc(body).replace(/\n/g,'<br>'));
+  }
+  let out='';
+  for(const r of rich){
+    const st=[];
+    if(r.b) st.push('font-weight:700');
+    if(r.i) st.push('font-style:italic');
+    const dec=[]; if(r.u) dec.push('underline'); if(r.st) dec.push('line-through');
+    if(dec.length) st.push('text-decoration:'+dec.join(' '));
+    if(r.f && FONTS.some(f=>f[0]===r.f)) st.push('font-family:'+fontStack(r.f));
+    if(r.sz && [1,2,3].includes(+r.sz)) st.push('font-size:'+({1:'12px',2:'14.5px',3:'19.5px'}[+r.sz]));
+    if(r.c && /^#[0-9a-fA-F]{6}$/.test(r.c)) st.push('color:'+r.c);
+    const inner = esc(r.t||'').replace(/\n/g,'<br>');
+    out += st.length ? '<span style="'+st.join(';')+'">'+inner+'</span>' : inner;
+  }
+  return linkify(out);
+}
+function linkify(html){
+  return html.replace(/(https?:\/\/[^\s<]+)/g, u=>{
+    const clean=u.replace(/[.,)\]]+$/,'');
+    return '<a href="'+clean+'" target="_blank" rel="noopener noreferrer nofollow">'+clean+'</a>';
   });
 }
 
-function renderMessage(msg, showSender) {
-  const row = document.createElement('div');
-  const mine = msg.uid === currentUid;
-  row.className = 'msg-row ' + (mine ? 'mine' : 'theirs');
-
-  if (showSender && !mine) {
-    const sender = document.createElement('div');
-    sender.className = 'msg-sender';
-    sender.textContent = msg.username || 'unknown';
-    row.appendChild(sender);
+/* ===================== reactions (7) ===================== */
+function reactionsNode(m){
+  const box=el('div','reacts');
+  const r=m.reactions||{};
+  for(const [emo,uids] of Object.entries(r)){
+    if(!Array.isArray(uids)||!uids.length) continue;
+    const mine=uids.includes(S.uid);
+    const b=el('button','react'+(mine?' mine':''));
+    b.append(document.createTextNode(emo), el('span','n', String(uids.length)));
+    b.title = uids.map(u=>shownName(u)).join(', ');
+    b.addEventListener('click', ()=>toggleReaction(m, emo));
+    box.appendChild(b);
   }
-
-  const bubble = document.createElement('div');
-  bubble.className = 'msg-bubble';
-  bubble.textContent = msg.text;
-  row.appendChild(bubble);
-
-  const time = document.createElement('div');
-  time.className = 'msg-time';
-  time.textContent = formatTime(msg.createdAt);
-  row.appendChild(time);
-
-  messagesEl.appendChild(row);
+  return box;
+}
+async function toggleReaction(m, emo){
+  const r = JSON.parse(JSON.stringify(m.reactions||{}));
+  const list = r[emo] || [];
+  const i = list.indexOf(S.uid);
+  if(i>=0) list.splice(i,1); else list.push(S.uid);
+  if(list.length) r[emo]=list; else delete r[emo];
+  const ref = S.room.type==='everyone'
+    ? doc(db,'rooms','everyone','messages',m.id)
+    : doc(db,'dms',S.room.id,'messages',m.id);
+  try{ await updateDoc(ref,{reactions:r}); }catch(e){ toast('Could not react: '+e.code,'bad'); }
 }
 
-function formatTime(ts) {
-  if (!ts || !ts.toDate) return '';
-  const d = ts.toDate();
-  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
-
-/* ---------- Sending ---------- */
-composeForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const text = msgInput.value.trim();
-  if (!text) return;
-  sendBtn.disabled = true;
-  msgInput.value = '';
-  autoGrow();
-  try {
-    const messagesRef = currentRoom.type === 'everyone'
-      ? collection(db, 'rooms', 'everyone', 'messages')
-      : collection(db, 'dms', currentRoom.id, 'messages');
-    await addDoc(messagesRef, {
-      text,
-      uid: currentUid,
-      username: currentUsername,
-      createdAt: serverTimestamp(),
+/* ===================== delete (2) ===================== */
+async function deleteMessage(m){
+  if(m.uid!==S.uid){ toast('You can only delete your own messages.','bad'); return; }
+  if(!confirm('Delete this message for everyone?\n\nIt will show as "This message was deleted". Other members will not be able to see that it was you.')) return;
+  const base = S.room.type==='everyone' ? ['rooms','everyone','messages'] : ['dms',S.room.id,'messages'];
+  try{
+    // write-only audit entry: readable by the project owner in the console, by nobody in the app
+    await addDoc(collection(db,'deletionLog'), {
+      by:S.uid, room:S.room.id, msgId:m.id, at:serverTimestamp()
     });
-  } finally {
-    sendBtn.disabled = false;
-    msgInput.focus();
-  }
-});
-
-msgInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    composeForm.requestSubmit();
-  }
-});
-msgInput.addEventListener('input', autoGrow);
-function autoGrow() {
-  msgInput.style.height = 'auto';
-  msgInput.style.height = Math.min(msgInput.scrollHeight, 120) + 'px';
+    await updateDoc(doc(db,...base,m.id), {
+      deleted:true, text:deleteField(), ct:deleteField(), iv:deleteField(),
+      rich:deleteField(), file:deleteField(), uid:deleteField()
+    });
+    logLocal('message','Deleted a message in '+(S.room.type==='everyone'?'#everyone':'a DM'));
+  }catch(e){ toast('Delete failed: '+e.code,'bad'); }
 }
 
-function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, (c) => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-  }[c]));
+/* ===================== typing (18) ===================== */
+let _typingData={};
+function watchTyping(roomId){
+  _typingData={}; paintTyping();
+  S.unsub.typing = onSnapshot(doc(db,'typing',roomId), s=>{
+    _typingData = s.exists()? (s.data().who||{}) : {};
+    paintTyping();
+  }, ()=>{});
+}
+function paintTyping(){
+  // must run on a timer too: when someone STOPS typing no new snapshot
+  // arrives, so a snapshot-only repaint would leave "is typing…" stuck.
+  const live = Object.entries(_typingData)
+    .filter(([u,t])=> u!==S.uid && (nowMs()-tsMs(t))<TYPING_TTL)
+    .map(([u])=>shownName(u));
+  const host=$('#typing');
+  host.innerHTML='';
+  if(live.length){
+    const d=el('span','tdots'); d.append(el('i'),el('i'),el('i'));
+    host.append(d, document.createTextNode(
+      live.length===1 ? live[0]+' is typing…'
+      : live.length===2 ? live.join(' and ')+' are typing…'
+      : 'Several people are typing…'));
+  }
+}
+setInterval(paintTyping, 2500);   // ONE global timer, not one per room
+async function pingTyping(){
+  const t=nowMs();
+  if(t - S.lastTypingWrite < TYPING_THROTTLE) return;
+  S.lastTypingWrite=t;
+  try{
+    await setDoc(doc(db,'typing',S.room.id), {who:{[S.uid]:Timestamp.fromMillis(t)}}, {merge:true});
+  }catch(_){}
+}
+
+/* ===================== COMPOSER (14) ===================== */
+const editor=$('#editor');
+
+function buildFontPickers(){
+  const sel=$('#fmtFont');
+  sel.innerHTML='';
+  for(const [name] of FONTS){
+    const o=el('option',null,name); o.value=name; o.style.fontFamily=fontStack(name);
+    sel.appendChild(o);
+  }
+}
+$$('#fmtbar .fbtn[data-cmd]').forEach(b=>{
+  b.addEventListener('mousedown', e=>e.preventDefault());
+  b.addEventListener('click', ()=>{ document.execCommand(b.dataset.cmd); syncFmtState(); editor.focus(); });
+});
+$('#fmtFont').addEventListener('change', e=>{
+  applyStyleToSelection({fontFamily:fontStack(e.target.value), _font:e.target.value});
+});
+$('#fmtSize').addEventListener('change', e=>{
+  const px={1:'12px',2:'14.5px',3:'19.5px'}[e.target.value];
+  applyStyleToSelection({fontSize:px, _size:e.target.value});
+});
+$('#fmtColor').addEventListener('input', e=>{
+  applyStyleToSelection({color:e.target.value, _color:e.target.value});
+});
+$('#fmtClear').addEventListener('click', ()=>{
+  document.execCommand('removeFormat');
+  const sel=window.getSelection();
+  if(sel && !sel.isCollapsed){
+    // strip inline font/size/colour spans inside the selection
+    const frag=sel.getRangeAt(0).cloneContents();
+    const plain=document.createTextNode(frag.textContent);
+    sel.getRangeAt(0).deleteContents(); sel.getRangeAt(0).insertNode(plain);
+  }
+  syncFmtState(); editor.focus();
+});
+function applyStyleToSelection(styles){
+  const sel=window.getSelection();
+  if(!sel || sel.rangeCount===0) return;
+  const range=sel.getRangeAt(0);
+  if(range.collapsed){ editor.focus(); return; }
+  if(!editor.contains(range.commonAncestorContainer)) return;
+  const span=document.createElement('span');
+  if(styles.fontFamily) span.style.fontFamily=styles.fontFamily;
+  if(styles.fontSize)   span.style.fontSize=styles.fontSize;
+  if(styles.color)      span.style.color=styles.color;
+  if(styles._font) span.dataset.font=styles._font;
+  if(styles._size) span.dataset.size=styles._size;
+  if(styles._color) span.dataset.color=styles._color;
+  try{ span.appendChild(range.extractContents()); range.insertNode(span); }
+  catch(e){ /* complex selection */ }
+  sel.removeAllRanges();
+  editor.focus();
+}
+function syncFmtState(){
+  const q=c=>{ try{ return document.queryCommandState(c); }catch(e){ return false; } };
+  $$('#fmtbar .fbtn[data-cmd]').forEach(b=>b.classList.toggle('on', q(b.dataset.cmd)));
+}
+document.addEventListener('selectionchange', ()=>{ if(document.activeElement===editor) syncFmtState(); });
+
+/* extract flat runs from the contenteditable */
+function extractRuns(){
+  const runs=[];
+  const walk=(node, inh)=>{
+    for(const ch of node.childNodes){
+      if(ch.nodeType===3){
+        if(ch.nodeValue) runs.push({t:ch.nodeValue, ...inh});
+      }else if(ch.nodeType===1){
+        if(ch.tagName==='BR'){ runs.push({t:'\n', ...inh}); continue; }
+        const cs=ch.style||{};
+        const next={...inh};
+        const tag=ch.tagName;
+        if(tag==='B'||tag==='STRONG'||(cs.fontWeight&&+cs.fontWeight>=600)||cs.fontWeight==='bold') next.b=1;
+        if(tag==='I'||tag==='EM'||cs.fontStyle==='italic') next.i=1;
+        if(tag==='U') next.u=1;
+        if(tag==='S'||tag==='STRIKE'||tag==='DEL') next.st=1;
+        const td=cs.textDecoration||cs.textDecorationLine||'';
+        if(td.includes('underline')) next.u=1;
+        if(td.includes('line-through')) next.st=1;
+        if(ch.dataset && ch.dataset.font) next.f=ch.dataset.font;
+        if(ch.dataset && ch.dataset.size) next.sz=+ch.dataset.size;
+        if(ch.dataset && ch.dataset.color) next.c=ch.dataset.color;
+        if(tag==='DIV'||tag==='P'){ if(runs.length) runs.push({t:'\n', ...inh}); }
+        walk(ch, next);
+      }
+    }
+  };
+  walk(editor, {});
+  // merge adjacent identical runs, drop empties
+  const out=[];
+  for(const r of runs){
+    if(!r.t) continue;
+    const p=out[out.length-1];
+    const same = p && p.b===r.b && p.i===r.i && p.u===r.u && p.st===r.st && p.f===r.f && p.sz===r.sz && p.c===r.c;
+    if(same) p.t += r.t; else out.push({...r});
+  }
+  // if nothing is actually styled, drop the rich payload entirely
+  const styled = out.some(r=>r.b||r.i||r.u||r.st||r.f||(r.sz&&+r.sz!==2)||r.c);
+  const text = out.map(r=>r.t).join('');
+  return { text, rich: styled? out : null };
+}
+
+editor.addEventListener('keydown', e=>{
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); send(); }
+});
+editor.addEventListener('input', ()=>{ pingTyping(); });
+editor.addEventListener('paste', e=>{
+  e.preventDefault();
+  const t=(e.clipboardData||window.clipboardData).getData('text/plain');
+  document.execCommand('insertText', false, t);
+  const found = scanTextPrivacy(t, 'pasted text');
+  if(found.length) toast('Privacy check flagged this paste — see the 🛡 panel.','warn',5200);
+});
+$('#send').addEventListener('click', send);
+
+async function send(){
+  const {text, rich} = extractRuns();
+  const body=text.replace(/\n+$/,'');
+  if(!body.trim() && !pendingFile) return;
+
+  const found = scanTextPrivacy(body, S.room.type==='everyone'?'#everyone':'a direct message');
+  if(found.some(f=>f.sev==='high')){
+    const ok = confirm('Privacy check\n\nThis message looks like it contains: '
+      + found.filter(f=>f.sev==='high').map(f=>f.what).join(', ')
+      + '\n\nSend it anyway?');
+    if(!ok) return;
+  }
+
+  $('#send').disabled=true;
+  const payload = { uid:S.uid, createdAt:serverTimestamp() };
+  if(pendingFile) payload.file = pendingFile;
+
+  try{
+    if(S.room.type==='dm'){
+      const key = S.shared.get(S.room.otherUid) || await prepareSharedKey(S.room.otherUid);
+      if(!key){ toast('Cannot encrypt for this person yet — message not sent.','bad',6000); return; }
+      const packed = await encWith(key, JSON.stringify({b:body, r:rich}));
+      payload.ct=packed.ct; payload.iv=packed.iv;
+      await addDoc(collection(db,'dms',S.room.id,'messages'), payload);
+      await setDoc(doc(db,'dms',S.room.id), {
+        participants:[S.uid,S.room.otherUid].sort(),
+        lastMessageAt:serverTimestamp(), lastSender:S.uid
+      }, {merge:true});
+    }else{
+      payload.text=body; if(rich) payload.rich=rich;
+      await addDoc(collection(db,'rooms','everyone','messages'), payload);
+    }
+    editor.innerHTML=''; clearPendingFile(); syncFmtState();
+    logLocal('message','Sent a message in '+(S.room.type==='everyone'?'#everyone':'a DM'));
+  }catch(e){
+    toast('Send failed: '+(e.code||e.message),'bad',6000);
+  }finally{ $('#send').disabled=false; }
+}
+
+/* decrypt wrapper aware of the {b,r} envelope */
+const _decCache = new Map();
+async function decryptRow2(m){
+  if(_decCache.has(m.id)) return _decCache.get(m.id);
+  const out = await _decryptRow2(m);
+  if(out!==null) _decCache.set(m.id, out);
+  return out;
+}
+async function _decryptRow2(m){
+  const raw = await decryptRow(m);
+  if(raw===null) return null;
+  try{ const o=JSON.parse(raw); if(o && typeof o==='object' && 'b' in o) return o; }catch(e){}
+  return {b:raw, r:null};
+}
+
+/* ===================== emoji picker ===================== */
+let emojiTarget=null;
+function buildEmojiPicker(){
+  const host=$('#emoji'); host.innerHTML='';
+  for(const [group, list] of Object.entries(EMOJI)){
+    host.appendChild(el('div','eh',group));
+    const g=el('div','eg');
+    for(const e of list){
+      const b=el('button',null,e);
+      b.addEventListener('click', ()=>{ if(emojiTarget) emojiTarget(e); closeEmoji(); });
+      g.appendChild(b);
+    }
+    host.appendChild(g);
+  }
+}
+function openEmojiFor(anchor, cb){
+  emojiTarget=cb;
+  const host=$('#emoji'); host.classList.add('on');
+  const r=anchor.getBoundingClientRect();
+  const w=294, h=Math.min(262, window.innerHeight-40);
+  let left=Math.min(Math.max(8, r.left-w+r.width), window.innerWidth-w-8);
+  let top=r.top-h-8; if(top<8) top=Math.min(r.bottom+8, window.innerHeight-h-8);
+  host.style.left=left+'px'; host.style.top=top+'px';
+}
+function closeEmoji(){ $('#emoji').classList.remove('on'); emojiTarget=null; }
+$('#btnEmoji').addEventListener('click', e=>{
+  e.stopPropagation();
+  openEmojiFor(e.currentTarget, emo=>{ editor.focus(); document.execCommand('insertText', false, emo); });
+});
+document.addEventListener('click', e=>{
+  if(!$('#emoji').contains(e.target)) closeEmoji();
+});
+
+/* ===================== WORMHOLE FILE FLOW (5) ===================== */
+let pendingFile=null;
+function clearPendingFile(){ pendingFile=null; $('#btnFile').classList.remove('on'); }
+
+$('#btnFile').addEventListener('click', openWormholeFlow);
+
+function openWormholeFlow(){
+  openSheet('Send a file', `
+    <div class="grp">
+      <p class="help" style="font-size:12.5px;line-height:1.65">
+        Foxie never stores your file. Files go through
+        <b>Wormhole</b> (wormhole.app), which encrypts them in your browser before upload
+        and expires the link automatically. Foxie only carries the link.
+      </p>
+    </div>
+    <div class="grp">
+      <h4>Step 1 — upload</h4>
+      <button class="btn btn-ghost" id="whOpen" style="width:100%">Open Wormhole in a new tab ↗</button>
+      <p class="help">Drag your file in there, wait for the link, then press <b>Copy link</b>.</p>
+    </div>
+    <div class="grp">
+      <h4>Step 2 — paste the link back</h4>
+      <input class="inp" id="whUrl" placeholder="https://wormhole.app/…" spellcheck="false" />
+      <p class="help" id="whErr"></p>
+    </div>
+    <div class="grp">
+      <h4>Step 3 — describe it</h4>
+      <div class="two">
+        <div><label>File name</label><input class="inp" id="whName" placeholder="holiday-photos.zip" /></div>
+        <div><label>Size (optional)</label><input class="inp" id="whSize" placeholder="240 MB" /></div>
+      </div>
+      <div class="two" style="margin-top:10px">
+        <div><label>Expires in</label>
+          <select class="inp" id="whExp">
+            <option value="1">1 hour</option>
+            <option value="24" selected>24 hours</option>
+            <option value="72">3 days</option>
+            <option value="168">7 days</option>
+          </select>
+        </div>
+        <div><label>Download limit</label>
+          <select class="inp" id="whUses">
+            <option value="1">1 download</option>
+            <option value="3">3 downloads</option>
+            <option value="10">10 downloads</option>
+            <option value="0" selected>No limit set</option>
+          </select>
+        </div>
+      </div>
+      <p class="help warn">Foxie cannot read Wormhole's servers, so this countdown reflects what <b>you</b> select here. If Wormhole expires the file sooner, the link simply stops working.</p>
+    </div>
+  `, [
+    {label:'Cancel', cls:'btn-ghost', act:c=>c()},
+    {label:'Attach to message', cls:'btn-primary', keep:true, act:(close, host)=>{
+      const url=$('#whUrl',host).value.trim();
+      const errEl=$('#whErr',host);
+      let u;
+      try{ u=new URL(url); }catch(e){ errEl.className='help bad'; errEl.textContent='That is not a valid URL.'; return; }
+      if(u.protocol!=='https:'){ errEl.className='help bad'; errEl.textContent='Only https links are accepted.'; return; }
+      if(!/(^|\.)wormhole\.app$/i.test(u.hostname)){
+        errEl.className='help bad';
+        errEl.textContent='That is not a wormhole.app link. Foxie only carries Wormhole links, so files stay end-to-end encrypted.';
+        return;
+      }
+      const hours=+$('#whExp',host).value;
+      pendingFile={
+        url:u.toString(),
+        name:$('#whName',host).value.trim()||'file',
+        size:$('#whSize',host).value.trim()||'',
+        expiresAt:nowMs()+hours*3600000,
+        uses:+$('#whUses',host).value
+      };
+      $('#btnFile').classList.add('on');
+      close();
+      toast('File link attached — write a note and hit Send.','good');
+    }}
+  ]);
+  $('#whOpen').addEventListener('click', ()=>window.open('https://wormhole.app/','_blank','noopener,noreferrer'));
+}
+
+function fileCardNode(f){
+  const card=el('div','filecard');
+  const top=el('div','fc-top');
+  top.appendChild(el('div','fc-ic','📦'));
+  const t=el('div'); t.style.minWidth='0';
+  t.appendChild(el('div','fc-n', f.name||'file'));
+  t.appendChild(el('div','fc-s', (f.size? f.size+' · ':'')+'via Wormhole · end-to-end encrypted'));
+  top.appendChild(t); card.appendChild(top);
+
+  const meta=el('div','fc-meta');
+  const left=(f.expiresAt||0)-nowMs();
+  const alive=left>0;
+  const c1=el('span','chip '+(alive?(left<3600000?'warn':'live'):'dead'), alive?('⏳ '+fmtLeft(left)):'⏳ likely expired');
+  meta.appendChild(c1);
+  meta.appendChild(el('span','chip', f.uses? ('⬇ '+f.uses+' download'+(f.uses>1?'s':'')+' allowed') : '⬇ no limit set'));
+  meta.appendChild(el('span','chip', alive?'◉ probably still there':'◌ probably gone'));
+  card.appendChild(meta);
+
+  const a=el('a','fc-go', alive? 'Open in Wormhole ↗' : 'Try the link anyway ↗');
+  a.href=f.url; a.target='_blank'; a.rel='noopener noreferrer';
+  card.appendChild(a);
+  return card;
+}
+
+/* ===================== PRIVACY ENGINE (9) =====================
+   Every finding lands in the 🛡 Privacy centre — a different place
+   from Settings, from Notifications and from the Activity log.
+   ============================================================= */
+const PRIV_RULES = [
+  { id:'card', sev:'high', what:'a payment card number',
+    test:t=>{ const m=t.match(/\b(?:\d[ -]*?){13,19}\b/g)||[];
+      return m.some(s=>{ const d=s.replace(/\D/g,''); if(d.length<13||d.length>19) return false; return luhn(d); }); },
+    msg:'A number in this text passes the Luhn checksum used by payment cards.' },
+  { id:'pk', sev:'high', what:'a private key block',
+    test:t=>/-----BEGIN [A-Z ]*PRIVATE KEY-----/.test(t),
+    msg:'This looks like a cryptographic private key. Anyone who reads it can impersonate you.' },
+  { id:'token', sev:'high', what:'an API key or access token',
+    test:t=>/\b(?:sk-[A-Za-z0-9]{16,}|gh[pousr]_[A-Za-z0-9]{20,}|AIza[0-9A-Za-z_\-]{30,}|xox[baprs]-[A-Za-z0-9-]{10,}|eyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}\.)/.test(t),
+    msg:'This matches the shape of an API key, bearer token or JWT.' },
+  { id:'pwd', sev:'high', what:'a password being typed out',
+    test:t=>/\b(?:password|passwd|pwd|passphrase|pin)\s*(?:is|=|:)\s*\S{4,}/i.test(t),
+    msg:'Sharing a password in chat means it lives in the database permanently.' },
+  { id:'gov', sev:'high', what:'a government ID number',
+    test:t=>/\b\d{3}-\d{2}-\d{4}\b/.test(t) || /\b\d{4}\s?\d{4}\s?\d{4}\b/.test(t) || /\b[A-Z]{5}\d{4}[A-Z]\b/.test(t),
+    msg:'This resembles a national ID, SSN, Aadhaar or PAN-style identifier.' },
+  { id:'email', sev:'med', what:'an email address',
+    test:t=>/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/.test(t),
+    msg:'Email addresses are durable identifiers that link this account to your real identity.' },
+  { id:'phone', sev:'med', what:'a phone number',
+    test:t=>/(?:\+\d{1,3}[\s-]?)?(?:\(\d{2,4}\)[\s-]?)?\d{3,5}[\s-]?\d{3,5}[\s-]?\d{0,5}/.test(t) && (t.replace(/\D/g,'').length>=9),
+    msg:'Phone numbers are reversible to a real identity in most countries.' },
+  { id:'geo', sev:'med', what:'precise coordinates',
+    test:t=>/-?\d{1,3}\.\d{4,}\s*,\s*-?\d{1,3}\.\d{4,}/.test(t),
+    msg:'These look like GPS coordinates accurate to a few metres.' },
+  { id:'addr', sev:'med', what:'a street address',
+    test:t=>/\b\d{1,5}\s+[A-Za-z][A-Za-z.\- ]{2,30}\s+(street|st|road|rd|avenue|ave|lane|ln|drive|dr|boulevard|blvd|nagar|marg|colony)\b/i.test(t),
+    msg:'This looks like a postal address.' },
+  { id:'track', sev:'low', what:'a link carrying tracking parameters',
+    test:t=>/[?&](utm_[a-z]+|fbclid|gclid|mc_eid|igshid|si)=/i.test(t),
+    msg:'The link contains campaign or click identifiers that tell the destination who sent you.' },
+  { id:'short', sev:'med', what:'a shortened link',
+    test:t=>/https?:\/\/(?:bit\.ly|tinyurl\.com|t\.co|goo\.gl|is\.gd|ow\.ly|buff\.ly|rb\.gy|cutt\.ly)\//i.test(t),
+    msg:'A shortener hides the real destination and logs everyone who clicks.' },
+  { id:'ip', sev:'med', what:'an IP address',
+    test:t=>/\b(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)\b/.test(t) && !/\b(?:0\.0\.0\.0|127\.0\.0\.1|255\.255\.255\.\d+)\b/.test(t),
+    msg:'A public IP address can reveal an approximate location and an internet provider.' },
+  { id:'invite', sev:'low', what:'an invite or join link',
+    test:t=>/https?:\/\/(?:discord\.gg|t\.me|chat\.whatsapp\.com|signal\.group)\//i.test(t),
+    msg:'Invite links let anyone who sees them join, including people you did not intend.' },
+  { id:'realname', sev:'low', what:'wording that reveals a full legal name',
+    test:t=>/\b(?:my (?:full|real|legal) name is|i am legally|born as)\b/i.test(t),
+    msg:'This ties your handle to a legal identity permanently.' },
+  { id:'dob', sev:'med', what:'a date of birth',
+    test:t=>/\b(?:dob|date of birth|born on)\b\s*[:\-]?\s*\d{1,4}[\/\-.]\d{1,2}[\/\-.]\d{1,4}/i.test(t),
+    msg:'Date of birth plus a name is enough for most identity checks.' }
+];
+function luhn(d){
+  let s=0, alt=false;
+  for(let i=d.length-1;i>=0;i--){ let n=+d[i]; if(alt){ n*=2; if(n>9)n-=9; } s+=n; alt=!alt; }
+  return s%10===0;
+}
+function scanTextPrivacy(text, where){
+  if(!text) return [];
+  const hits=[];
+  for(const r of PRIV_RULES){
+    let ok=false;
+    try{ ok=r.test(text); }catch(e){ ok=false; }
+    if(ok){
+      hits.push(r);
+      flagPrivacy('txt-'+r.id+'-'+where, r.sev, 'Possible '+r.what+' in '+where, r.msg);
+    }
+  }
+  return hits.map(h=>({what:h.what, sev:h.sev}));
+}
+function runEnvironmentPrivacyChecks(){
+  const https = location.protocol==='https:' || location.hostname==='localhost';
+  if(!https) flagPrivacy('http','high','This page is not using HTTPS',
+    'Everything you type can be read and altered in transit, and encryption features are disabled by the browser. Open the site over https://.');
+  if(!SUBTLE) flagPrivacy('subtle','high','Web Crypto is unavailable',
+    'Your browser did not expose crypto.subtle, so direct messages cannot be end-to-end encrypted in this session.');
+  if(!window.isSecureContext) flagPrivacy('ctx','high','Insecure browsing context',
+    'The browser has marked this page as not secure. Storage and crypto guarantees do not hold here.');
+  if(navigator.doNotTrack==='1' || navigator.globalPrivacyControl)
+    flagPrivacy('dnt','low','Do Not Track is on','Foxie has no trackers to disable, but your signal is noted. Nothing here is shared with advertisers.');
+  try{
+    if(!window.indexedDB) flagPrivacy('idb','med','Private storage unavailable',
+      'IndexedDB is blocked, so your decryption key cannot be cached. You will be asked for your password on every visit.');
+  }catch(e){}
+  if(navigator.storage && navigator.storage.persisted){
+    navigator.storage.persisted().then(p=>{
+      if(!p) flagPrivacy('persist','low','Storage is evictable',
+        'The browser may clear your cached decryption key under storage pressure. You would then need your password again — which is recoverable, unlike the key itself.');
+    }).catch(()=>{});
+  }
+  if(window.self!==window.top) flagPrivacy('frame','high','Foxie is running inside a frame',
+    'Another site has embedded Foxie, which is a classic clickjacking setup. Open it directly from its own address.');
+  flagPrivacy('group','low','The #everyone channel is not encrypted',
+    'Group messages are stored so that every signed-in member can read them, and the project owner can read them in the Firebase console. Only direct messages are end-to-end encrypted.');
+  flagPrivacy('meta','low','Metadata is always visible to the owner',
+    'Even for encrypted DMs, the fact that you messaged someone, and when, is stored in plain form. Contents are hidden; patterns are not.');
+}
+function scanProfilePrivacy(){
+  const me=S.me||{};
+  if(me.bio) scanTextPrivacy(me.bio, 'your bio');
+  if(me.status) scanTextPrivacy(me.status, 'your status');
+  if(me.displayName) scanTextPrivacy(me.displayName, 'your display name');
+  const open=(me.gameLinks||[]).filter(l=>l.visibility==='everyone');
+  if(open.length) flagPrivacy('links','med','Game handles are visible to everyone',
+    open.map(l=>l.game+': '+l.handle).join(' · ')+' — anyone with a Foxie account can see these and search for you on those platforms. Set them to "mutuals only" in Settings → Links if that is not what you want.');
+  if(me.photo) flagPrivacy('photo','low','Your picture was re-encoded',
+    'Foxie redraws avatars through a canvas at '+AVATAR_PX+'px, which discards EXIF metadata such as GPS coordinates and camera serial numbers before anything is uploaded.');
+}
+function flagPrivacy(id, sev, title, body){
+  if(S.privacyFlags.has(id)) return;
+  S.privacyFlags.set(id, {id, sev, title, body, at:nowMs(), seen:false});
+  paintPrivacyBadge();
+}
+function paintPrivacyBadge(){
+  const unseen=[...S.privacyFlags.values()].filter(f=>!f.seen && f.sev!=='low').length;
+  const b=$('#bPriv');
+  b.style.display=unseen?'grid':'none'; b.textContent=unseen;
+}
+
+/* ===================== NOTIFICATIONS ===================== */
+async function pushNotif(uid, type, title, body, sev='low'){
+  try{ await addDoc(collection(db,'notifications',uid,'items'), {type,title,body,sev,createdAt:serverTimestamp(),read:false}); }
+  catch(e){}
+}
+function watchNotifications(){
+  S.unsub.notifs = onSnapshot(
+    query(collection(db,'notifications',S.uid,'items'), orderBy('createdAt','desc'), limit(60)),
+    snap=>{
+      S.notifs = snap.docs.map(d=>({id:d.id, ...d.data()}));
+      const n = S.notifs.filter(x=>!x.read).length;
+      const b=$('#bNotif'); b.style.display=n?'grid':'none'; b.textContent=n>99?'99+':n;
+    }, ()=>{});
+}
+
+/* ===================== SHEETS ===================== */
+function openSheet(title, html, buttons=[], opts={}){
+  const host=$('#sheetHost');
+  host.innerHTML='';
+  const sheet=el('div','sheet'+(opts.wide?' wide':''));
+  const head=el('div','sheet-head');
+  head.appendChild(el('div','t',title));
+  const x=el('button','x','✕'); x.addEventListener('click', closeSheet); head.appendChild(x);
+  sheet.appendChild(head);
+  const bodyEl=el('div','sheet-body'); bodyEl.innerHTML=html; sheet.appendChild(bodyEl);
+  if(buttons.length){
+    const foot=el('div','sheet-foot');
+    for(const b of buttons){
+      const btn=el('button','btn '+(b.cls||'btn-ghost'), b.label);
+      btn.style.width='auto';
+      btn.addEventListener('click', ()=>b.act(closeSheet, bodyEl, btn));
+      foot.appendChild(btn);
+    }
+    sheet.appendChild(foot);
+  }
+  host.appendChild(sheet);
+  $('#scrim').classList.add('on');
+  return bodyEl;
+}
+function closeSheet(){ $('#scrim').classList.remove('on'); $('#sheetHost').innerHTML=''; S.openProfileUid=null; }
+$('#scrim').addEventListener('click', e=>{ if(e.target===$('#scrim')) closeSheet(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeSheet(); closeEmoji(); } });
+
+/* ===================== PROFILE CARD (17) ===================== */
+function openProfile(uid){
+  S.openProfileUid=uid;
+  const p=prof(uid), mine=uid===S.uid;
+  const mutual=isMutual(uid);
+  const canSee = l => l.visibility==='everyone' || (l.visibility==='mutuals' && (mutual||mine)) || mine;
+  const links=(p.gameLinks||[]).filter(canSee);
+
+  const html = `
+    <div style="margin:-18px -20px 0">
+      <div class="prof-banner"></div>
+      <div class="prof-top">
+        <div id="pfAv"></div>
+        <div class="prof-name" id="pfName"></div>
+        <div class="prof-handle">@${esc(p.username||'unknown')} ${mine?'· you':''}</div>
+        ${p.status?`<div class="prof-status">💭 ${esc(p.status)}</div>`:''}
+        <div class="rel-actions" id="pfRel"></div>
+        ${p.bio?`<div class="prof-sec"><h5>About</h5><div class="prof-bio">${esc(p.bio)}</div></div>`:''}
+        ${links.length?`<div class="prof-sec"><h5>Elsewhere</h5><div id="pfLinks"></div></div>`:''}
+        <div class="prof-sec">
+          <h5>Presence</h5>
+          <div class="prof-bio">${isOnline(uid)?'🟢 Online now':'⚫ Offline'}${p.lastSeen&&!isOnline(uid)?' · last seen '+fmtDay(tsMs(p.lastSeen))+' '+fmtTime(tsMs(p.lastSeen)):''}</div>
+        </div>
+        <div class="prof-sec" style="padding-bottom:6px">
+          <h5>Encryption</h5>
+          <div class="prof-bio">${p.publicKey?'🔒 Has published a key — direct messages with them are end-to-end encrypted.':'⚠ No key published yet. They need to sign in once before encrypted DMs work.'}</div>
+        </div>
+      </div>
+    </div>`;
+  const body = openSheet(mine?'Your profile':'Profile', html, mine?[{label:'Edit profile', cls:'btn-primary', act:c=>{c(); openSettings('identity');}}]:[]);
+
+  const av=avatarNode(uid,'xl'); $('#pfAv',body).replaceWith(av); av.id='pfAv';
+  const nm=$('#pfName',body);
+  nm.textContent=shownName(uid);
+  nm.style.fontFamily=fontStack(p.nameFont||'Inter');
+  if(p.nameColor) nm.style.color=p.nameColor;
+
+  const lh=$('#pfLinks',body);
+  if(lh) for(const l of links){
+    const r=el('div','linkrow');
+    r.appendChild(el('div','g', l.game));
+    const t=el('div'); t.style.flex='1';
+    t.appendChild(el('div','h', l.handle));
+    t.appendChild(el('div','vis', l.visibility==='everyone'?'visible to everyone':'visible to mutuals only'));
+    r.appendChild(t); lh.appendChild(r);
+  }
+  paintRelActions(uid, $('#pfRel',body));
+}
+function refreshOpenProfile(){
+  if(S.openProfileUid && $('#pfRel')) paintRelActions(S.openProfileUid, $('#pfRel'));
+}
+function paintRelActions(uid, host){
+  if(!host) return;
+  host.innerHTML='';
+  if(uid===S.uid) return;
+  const iFollow=S.following.has(uid), followsMe=S.followers.has(uid);
+  const pending=S.reqOut.some(r=>r.to===uid);
+  const incoming=S.reqIn.some(r=>r.from===uid);
+
+  const mk=(label,cls,fn)=>{ const b=el('button','btn mini '+cls,label); b.addEventListener('click',fn); host.appendChild(b); };
+
+  if(incoming){
+    mk('Accept request','btn-primary', ()=>acceptFollowRequest(uid));
+    mk('Decline','btn-ghost', ()=>declineFollowRequest(uid));
+  }
+  if(iFollow) mk('Following ✓ — unfollow','btn-ghost', ()=>{ if(confirm('Unfollow '+shownName(uid)+'? Your DM will close until you follow each other again.')) unfollow(uid); });
+  else if(pending) mk('Requested — withdraw','btn-ghost', ()=>cancelFollowRequest(uid));
+  else mk('Follow','btn-primary', ()=>sendFollowRequest(uid));
+
+  if(isMutual(uid)) mk('Open DM','btn-ghost', ()=>{ closeSheet(); openRoom({type:'dm', id:threadIdFor(uid), otherUid:uid}); });
+  else host.appendChild(el('div','help', followsMe? 'They follow you. Follow back to unlock DMs.' : 'You both need to follow each other before a DM opens.'));
+}
+function openChannelInfo(){
+  openSheet('#everyone', `
+    <p class="help" style="font-size:13px;line-height:1.7">
+      The open channel. Everyone with a Foxie account can read and write here.
+    </p>
+    <div class="grp" style="margin-top:16px">
+      <h4>What is protected</h4>
+      <p class="help">Transport is encrypted (HTTPS/TLS) and the database is encrypted at rest by Google.</p>
+    </div>
+    <div class="grp">
+      <h4>What is not</h4>
+      <p class="help warn">This channel is <b>not</b> end-to-end encrypted, and cannot be — a shared room has no single pair of keys. Every member reads it, and the project owner can read it in the Firebase console. Use a direct message for anything private.</p>
+    </div>
+    <div class="grp">
+      <h4>Members</h4>
+      <div id="chMembers"></div>
+    </div>`);
+  const h=$('#chMembers');
+  for(const p of S.profiles.values()){
+    const r=el('div','reqrow');
+    r.appendChild(avatarNode(p.uid));
+    const t=el('div','txt');
+    const n=el('div','n', shownName(p.uid));
+    n.style.fontFamily=fontStack(p.nameFont||'Inter'); if(p.nameColor) n.style.color=p.nameColor;
+    t.append(n, el('div','u','@'+(p.username||'')+(isOnline(p.uid)?' · online':'')));
+    r.appendChild(t);
+    const b=el('button','btn mini btn-ghost','View'); b.addEventListener('click',()=>openProfile(p.uid));
+    r.appendChild(b); h.appendChild(r);
+  }
+}
+
+/* ===================== DIRECTORY (13) ===================== */
+function openDirectory(){
+  openSheet('Find people', `
+    <input class="inp" id="dirQ" placeholder="Search by name or @handle…" />
+    <p class="help">To open a DM you both have to follow each other. Sending a request notifies them; they choose whether to accept.</p>
+    <div id="dirList" style="margin-top:14px"></div>`);
+  const paint=()=>{
+    const q=($('#dirQ').value||'').toLowerCase().trim();
+    const h=$('#dirList'); h.innerHTML='';
+    const list=[...S.profiles.values()].filter(p=>p.uid!==S.uid)
+      .filter(p=> !q || (p.username||'').toLowerCase().includes(q) || (p.displayName||'').toLowerCase().includes(q))
+      .sort((a,b)=>shownName(a.uid).localeCompare(shownName(b.uid)));
+    if(!list.length){ h.appendChild(el('div','help','Nobody matches that.')); return; }
+    for(const p of list){
+      const r=el('div','reqrow');
+      r.appendChild(avatarNode(p.uid));
+      const t=el('div','txt');
+      const n=el('div','n', shownName(p.uid));
+      n.style.fontFamily=fontStack(p.nameFont||'Inter'); if(p.nameColor) n.style.color=p.nameColor;
+      t.append(n, el('div','u','@'+(p.username||'')));
+      r.appendChild(t);
+      const act=el('div','inline');
+      const mk=(l,c,f)=>{ const b=el('button','btn mini '+c,l); b.addEventListener('click',f); act.appendChild(b); };
+      if(isMutual(p.uid)) mk('Message','btn-primary',()=>{ closeSheet(); openRoom({type:'dm', id:threadIdFor(p.uid), otherUid:p.uid}); });
+      else if(S.reqIn.some(x=>x.from===p.uid)) mk('Accept','btn-primary',()=>acceptFollowRequest(p.uid));
+      else if(S.reqOut.some(x=>x.to===p.uid)) mk('Requested','btn-ghost',()=>cancelFollowRequest(p.uid));
+      else if(S.following.has(p.uid)) mk('Following','btn-ghost',()=>unfollow(p.uid));
+      else mk('Follow','btn-primary',()=>sendFollowRequest(p.uid));
+      mk('Profile','btn-ghost',()=>openProfile(p.uid));
+      r.appendChild(act); h.appendChild(r);
+    }
+  };
+  $('#dirQ').addEventListener('input', paint);
+  paint();
+}
+
+/* ===================== TOP-BAR PANELS ===================== */
+$('#btnReq').addEventListener('click', ()=>{
+  openSheet('Follow requests', '<div id="rqIn"></div><div class="grp" style="margin-top:18px"><h4>Sent by you</h4><div id="rqOut"></div></div>');
+  const hi=$('#rqIn'), ho=$('#rqOut');
+  if(!S.reqIn.length) hi.appendChild(el('div','help','No incoming requests.'));
+  for(const r of S.reqIn){
+    const row=el('div','reqrow');
+    row.appendChild(avatarNode(r.from));
+    const t=el('div','txt'); t.append(el('div','n',shownName(r.from)), el('div','u','@'+(prof(r.from).username||'')));
+    row.appendChild(t);
+    const a=el('button','btn mini btn-primary','Accept'); a.addEventListener('click',()=>{acceptFollowRequest(r.from); closeSheet();});
+    const d=el('button','btn mini btn-ghost','Decline'); d.addEventListener('click',()=>{declineFollowRequest(r.from); closeSheet();});
+    row.append(a,d); hi.appendChild(row);
+  }
+  if(!S.reqOut.length) ho.appendChild(el('div','help','None pending.'));
+  for(const r of S.reqOut){
+    const row=el('div','reqrow');
+    row.appendChild(avatarNode(r.to));
+    const t=el('div','txt'); t.append(el('div','n',shownName(r.to)), el('div','u','waiting for them to accept'));
+    row.appendChild(t);
+    const c=el('button','btn mini btn-ghost','Withdraw'); c.addEventListener('click',()=>{cancelFollowRequest(r.to); closeSheet();});
+    row.appendChild(c); ho.appendChild(row);
+  }
+});
+
+$('#btnNotif').addEventListener('click', async ()=>{
+  openSheet('Notifications','<div id="ntList"></div>');
+  const h=$('#ntList');
+  if(!S.notifs.length) h.appendChild(el('div','help','Nothing yet.'));
+  for(const n of S.notifs){
+    const r=el('div','nrow sev-'+(n.sev||'low')+(n.read?'':' unseen'));
+    r.appendChild(el('div','nic', n.type==='follow'?'👤':n.type==='privacy'?'🛡':'✦'));
+    const t=el('div'); t.style.flex='1';
+    t.append(el('div','nt',n.title||''), el('div','nb',n.body||''), el('div','nw', fmtDay(tsMs(n.createdAt))+' '+fmtTime(tsMs(n.createdAt))));
+    r.appendChild(t); h.appendChild(r);
+  }
+  const batch=writeBatch(db); let k=0;
+  for(const n of S.notifs) if(!n.read){ batch.update(doc(db,'notifications',S.uid,'items',n.id), {read:true}); k++; }
+  if(k) batch.commit().catch(()=>{});
+});
+
+$('#btnPrivacy').addEventListener('click', ()=>{
+  const flags=[...S.privacyFlags.values()].sort((a,b)=>({high:0,med:1,low:2}[a.sev]-{high:0,med:1,low:2}[b.sev]));
+  openSheet('Privacy centre', `
+    <p class="help" style="margin-bottom:14px">${flags.length} finding${flags.length===1?'':'s'} from ${PRIV_RULES.length+9} independent checks. These are warnings, not blocks — Foxie never silently rewrites or refuses your message.</p>
+    <div id="pvList"></div>`, [], {wide:true});
+  const h=$('#pvList');
+  if(!flags.length) h.appendChild(el('div','help','Nothing flagged so far.'));
+  for(const f of flags){
+    const r=el('div','nrow sev-'+f.sev);
+    r.appendChild(el('div','nic', f.sev==='high'?'⛔':f.sev==='med'?'⚠':'ℹ'));
+    const t=el('div'); t.style.flex='1';
+    t.append(el('div','nt',f.title), el('div','nb',f.body),
+             el('div','nw',(f.sev==='high'?'High':f.sev==='med'?'Medium':'Informational')+' · '+fmtTime(f.at)));
+    r.appendChild(t); h.appendChild(r);
+    f.seen=true;
+  }
+  paintPrivacyBadge();
+});
+
+$('#btnLogs').addEventListener('click', ()=>{
+  openSheet('Activity log', `
+    <p class="help" style="margin-bottom:12px">Kept in memory on this device only — never uploaded, cleared when you close the tab.</p>
+    <div id="lgList"></div>`);
+  const h=$('#lgList');
+  if(!S.logs.length) h.appendChild(el('div','help','Nothing recorded this session.'));
+  for(const l of S.logs){
+    const r=el('div','nrow');
+    r.appendChild(el('div','nic', l.kind==='crypto'?'🔑':l.kind==='social'?'👤':l.kind==='message'?'✉':'•'));
+    const t=el('div'); t.style.flex='1';
+    t.append(el('div','nb',l.detail), el('div','nw', fmtTime(l.at)));
+    r.appendChild(t); h.appendChild(r);
+  }
+});
+
+/* ===================== SETTINGS ===================== */
+$('#btnSettings').addEventListener('click', ()=>openSettings('identity'));
+
+function openSettings(startTab='identity'){
+  const me=S.me||{};
+  const body = openSheet('Settings', `
+    <div class="tabs">
+      <button class="tab" data-p="identity">Identity</button>
+      <button class="tab" data-p="look">Name style</button>
+      <button class="tab" data-p="links">Links</button>
+      <button class="tab" data-p="security">Security</button>
+    </div>
+
+    <div class="pane" data-p="identity">
+      <div class="grp">
+        <h4>Picture</h4>
+        <div class="inline">
+          <div id="stAv"></div>
+          <div class="stack" style="flex:1">
+            <input type="file" id="stFile" accept="image/*" style="display:none" />
+            <button class="btn btn-ghost mini" id="stPick">Choose an image…</button>
+            <button class="btn btn-ghost mini" id="stClear">Remove picture</button>
+          </div>
+        </div>
+        <p class="help">Redrawn to ${AVATAR_PX}×${AVATAR_PX} in your browser before upload, which strips EXIF data including GPS.</p>
+      </div>
+      <div class="grp">
+        <h4>Display name</h4>
+        <input class="inp" id="stName" maxlength="40" value="${esc(me.displayName||'')}" placeholder="Leave empty to show @handle" />
+      </div>
+      <div class="grp">
+        <h4>Handle</h4>
+        <div class="inline"><span style="color:var(--text-3)">@</span>
+          <input class="inp" id="stHandle" style="flex:1" maxlength="24" value="${esc(me.username||'')}" spellcheck="false" /></div>
+        <p class="help">Changing this changes what you type to log in. Lowercase letters, numbers, dots, underscores and hyphens.</p>
+      </div>
+      <div class="grp">
+        <h4>Status</h4>
+        <input class="inp" id="stStatus" maxlength="80" value="${esc(me.status||'')}" placeholder="What you're feeling right now" />
+      </div>
+      <div class="grp">
+        <h4>Bio</h4>
+        <textarea class="inp" id="stBio" maxlength="600" placeholder="A few lines about you">${esc(me.bio||'')}</textarea>
+      </div>
+    </div>
+
+    <div class="pane" data-p="look">
+      <div class="grp">
+        <h4>Preview</h4>
+        <div class="name-preview" id="stPrev">${esc(me.displayName||('@'+(me.username||'')))}</div>
+      </div>
+      <div class="grp">
+        <h4>Font</h4>
+        <select class="inp" id="stFont"></select>
+      </div>
+      <div class="grp">
+        <h4>Colour</h4>
+        <div class="inline">
+          <input type="color" class="swatch" style="width:42px;height:32px" id="stColor" value="${esc(me.nameColor||'#E8E6E1')}" />
+          <button class="btn btn-ghost mini" id="stColorReset">Use default</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pane" data-p="links">
+      <div class="grp">
+        <h4>Game and platform handles</h4>
+        <p class="help">No URLs — just the platform and your name on it. You choose who can see each one.</p>
+        <div id="stLinks" style="margin-top:11px"></div>
+        <div class="two" style="margin-top:10px">
+          <input class="inp" id="lkGame" placeholder="Minecraft, Among Us, Foxie…" maxlength="28" />
+          <input class="inp" id="lkHandle" placeholder="your handle there" maxlength="40" />
+        </div>
+        <div class="inline" style="margin-top:9px">
+          <select class="inp" id="lkVis" style="flex:1">
+            <option value="mutuals">Visible to mutuals only</option>
+            <option value="everyone">Visible to everyone here</option>
+          </select>
+          <button class="btn btn-ghost mini" id="lkAdd">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pane" data-p="security">
+      <div class="grp">
+        <h4>Change your password</h4>
+        <p class="help">You set this yourself. Nobody — not the person who created your account, not Foxie — can read it back. Firebase stores only a scrypt hash.</p>
+        <div class="stack" style="margin-top:11px">
+          <div><label>Current password</label><input class="inp" type="password" id="pwOld" autocomplete="current-password" /></div>
+          <div><label>New password</label><input class="inp" type="password" id="pwNew" autocomplete="new-password" />
+            <div class="meter"><i id="pwMeter"></i></div>
+            <p class="help" id="pwHint">At least 8 characters.</p></div>
+          <div><label>Repeat new password</label><input class="inp" type="password" id="pwNew2" autocomplete="new-password" /></div>
+          <button class="btn btn-primary" id="pwGo">Update password</button>
+          <div class="note" id="pwNote"></div>
+        </div>
+        <p class="help warn" style="margin-top:12px">Your DM key is re-locked with the new password automatically. If you forget your password there is no reset — the owner can issue a new one, but your existing encrypted DMs become permanently unreadable. That is what end-to-end means.</p>
+      </div>
+      <div class="grp">
+        <h4>Encryption key</h4>
+        <div class="stack">
+          <div class="help" id="keyState"></div>
+          <button class="btn btn-ghost mini" id="keyForget">Forget key on this device</button>
+        </div>
+      </div>
+    </div>
+  `, [{label:'Save profile', cls:'btn-primary', keep:true, act:(close,host,btn)=>saveProfile(close,host,btn)}], {wide:true});
+
+  // tabs
+  $$('.tab', body).forEach(t=>t.addEventListener('click', ()=>{
+    $$('.tab',body).forEach(x=>x.classList.remove('on'));
+    $$('.pane',body).forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    $('.pane[data-p="'+t.dataset.p+'"]', body).classList.add('on');
+  }));
+  $('.tab[data-p="'+startTab+'"]', body).click();
+
+  // avatar
+  const av=avatarNode(S.uid,'lg'); $('#stAv',body).replaceWith(av); av.id='stAv';
+  let newPhoto = undefined;
+  $('#stPick',body).addEventListener('click', ()=>$('#stFile',body).click());
+  $('#stFile',body).addEventListener('change', async e=>{
+    const f=e.target.files[0]; if(!f) return;
+    if(!f.type.startsWith('image/')){ toast('That is not an image.','bad'); return; }
+    try{
+      newPhoto = await shrinkImage(f, AVATAR_PX);
+      const img=el('img'); img.src=newPhoto;
+      const host=$('#stAv',body); host.innerHTML=''; host.appendChild(img); host.appendChild(el('div','dot on'));
+      toast('Picture ready — press Save profile.','good');
+    }catch(err){ toast('Could not read that image.','bad'); }
+  });
+  $('#stClear',body).addEventListener('click', ()=>{
+    newPhoto=null;
+    const host=$('#stAv',body); host.innerHTML=(shownName(S.uid).replace(/^@/,'')[0]||'?').toUpperCase();
+    host.appendChild(el('div','dot on'));
+  });
+
+  // name style
+  const fsel=$('#stFont',body);
+  for(const [n] of FONTS){ const o=el('option',null,n); o.value=n; o.style.fontFamily=fontStack(n); fsel.appendChild(o); }
+  fsel.value = me.nameFont||'Inter';
+  const prev=$('#stPrev',body);
+  const paintPrev=()=>{ prev.style.fontFamily=fontStack(fsel.value); prev.style.color=$('#stColor',body).value;
+    prev.textContent = $('#stName',body).value.trim() || ('@'+$('#stHandle',body).value.trim()); };
+  fsel.addEventListener('change',paintPrev);
+  $('#stColor',body).addEventListener('input',paintPrev);
+  $('#stName',body).addEventListener('input',paintPrev);
+  $('#stColorReset',body).addEventListener('click',()=>{ $('#stColor',body).value='#E8E6E1'; paintPrev(); });
+  paintPrev();
+
+  // links
+  let links=[...(me.gameLinks||[])];
+  const paintLinks=()=>{
+    const h=$('#stLinks',body); h.innerHTML='';
+    if(!links.length){ h.appendChild(el('div','help','Nothing added yet.')); return; }
+    links.forEach((l,i)=>{
+      const r=el('div','linkrow');
+      r.appendChild(el('div','g', l.game));
+      const t=el('div'); t.style.flex='1';
+      t.append(el('div','h',l.handle), el('div','vis', l.visibility==='everyone'?'everyone':'mutuals only'));
+      r.appendChild(t);
+      const tg=el('button','btn mini btn-ghost', l.visibility==='everyone'?'Make private':'Make public');
+      tg.addEventListener('click',()=>{ links[i].visibility = l.visibility==='everyone'?'mutuals':'everyone'; paintLinks(); });
+      const rm=el('button','btn mini btn-danger','✕');
+      rm.addEventListener('click',()=>{ links.splice(i,1); paintLinks(); });
+      r.append(tg,rm); h.appendChild(r);
+    });
+  };
+  $('#lkAdd',body).addEventListener('click',()=>{
+    const g=$('#lkGame',body).value.trim(), hh=$('#lkHandle',body).value.trim();
+    if(!g||!hh){ toast('Fill both fields.','bad'); return; }
+    if(links.length>=12){ toast('Twelve links is the cap.','bad'); return; }
+    links.push({game:g, handle:hh, visibility:$('#lkVis',body).value});
+    $('#lkGame',body).value=''; $('#lkHandle',body).value='';
+    paintLinks();
+  });
+  paintLinks();
+
+  // security
+  const ks=$('#keyState',body);
+  ks.textContent = S.priv ? '🔒 Unlocked on this device. Encrypted DMs are readable.'
+                          : '🔓 Locked. DMs will show as unreadable until you enter your password.';
+  if(!S.priv){
+    const b=el('button','btn mini btn-primary','Unlock now'); b.style.marginTop='8px';
+    b.addEventListener('click',()=>{ closeSheet(); promptUnlock('Unlock your messages'); });
+    ks.appendChild(document.createElement('br')); ks.appendChild(b);
+  }
+  $('#keyForget',body).addEventListener('click', async ()=>{
+    if(!confirm('Remove the cached key from this device?\n\nYou will need your password to read DMs again here.')) return;
+    await idbDel('priv:'+S.uid); S.priv=null; S.shared.clear();
+    toast('Key removed from this device.','good'); closeSheet();
+  });
+  const meter=$('#pwMeter',body), hint=$('#pwHint',body);
+  $('#pwNew',body).addEventListener('input', e=>{
+    const s=pwStrength(e.target.value);
+    meter.style.width=s.pct+'%'; meter.style.background=s.colour;
+    hint.textContent=s.label; hint.className='help'+(s.pct<50?' warn':'');
+  });
+  $('#pwGo',body).addEventListener('click', ()=>changePassword(body));
+
+  // expose for save
+  body._getPhoto = ()=>newPhoto;
+  body._getLinks = ()=>links;
+}
+
+function pwStrength(p){
+  if(!p) return {pct:0, colour:'var(--danger)', label:'At least 8 characters.'};
+  let score=0;
+  if(p.length>=8) score+=1; if(p.length>=12) score+=1; if(p.length>=16) score+=1;
+  if(/[a-z]/.test(p)&&/[A-Z]/.test(p)) score+=1;
+  if(/\d/.test(p)) score+=1;
+  if(/[^A-Za-z0-9]/.test(p)) score+=1;
+  if(/^(?:\d+|[a-z]+)$/i.test(p)) score=Math.max(0,score-2);
+  const pct=Math.min(100, score*17);
+  const colour = pct<40?'var(--danger)':pct<70?'var(--warn)':'var(--green)';
+  const label = pct<40?'Weak — this also protects your DM key, so it matters more than usual.'
+              : pct<70?'Reasonable. Longer beats more symbols.'
+              : 'Strong.';
+  return {pct, colour, label};
+}
+
+async function changePassword(body){
+  const note=$('#pwNote',body); note.className='note err';
+  const oldP=$('#pwOld',body).value, a=$('#pwNew',body).value, b=$('#pwNew2',body).value;
+  if(a.length<8){ note.textContent='New password must be at least 8 characters.'; return; }
+  if(a!==b){ note.textContent='The two new passwords do not match.'; return; }
+  if(a===oldP){ note.textContent='That is the same password.'; return; }
+  const btn=$('#pwGo',body); btn.disabled=true;
+  try{
+    const cred = EmailAuthProvider.credential(auth.currentUser.email, oldP);
+    await reauthenticateWithCredential(auth.currentUser, cred);
+
+    // re-wrap the DM key under the new password BEFORE changing it
+    if(SUBTLE && S.me.wrappedPrivateKey){
+      const wrapKey = await deriveWrapKey(oldP, unb64(S.me.wrappedPrivateKey.salt));
+      const plain = await SUBTLE.decrypt({name:'AES-GCM', iv:unb64(S.me.wrappedPrivateKey.iv)}, wrapKey, unb64(S.me.wrappedPrivateKey.ct));
+      const jwk = JSON.parse(new TextDecoder().decode(plain));
+      const rewrapped = await rewrapIdentity(jwk, a);
+      await updateDoc(doc(db,'users',S.uid), {wrappedPrivateKey:rewrapped});
+      S.me.wrappedPrivateKey = rewrapped;
+    }
+    await updatePassword(auth.currentUser, a);
+    S.sessionPassword = a;
+    note.className='note ok';
+    note.textContent='Password updated. Your DM key was re-locked with it.';
+    $('#pwOld',body).value=$('#pwNew',body).value=$('#pwNew2',body).value='';
+    logLocal('crypto','Changed password and re-wrapped the DM key');
+    const s=pwStrength(a);
+    if(s.pct<40) flagPrivacy('weakpw-'+nowMs(),'high','Your new password is weak',
+      'Your password is what locks your direct-message key. A weak one is the shortest path into your encrypted messages.');
+  }catch(e){
+    note.className='note err';
+    note.textContent = e.code==='auth/wrong-password' || e.code==='auth/invalid-credential'
+      ? 'Current password is not correct.'
+      : e.code==='auth/weak-password' ? 'Firebase rejected that as too weak.'
+      : 'Could not update: '+(e.code||e.message);
+  }finally{ btn.disabled=false; }
+}
+
+async function saveProfile(close, body, btn){
+  btn.disabled=true;
+  try{
+    const displayName=$('#stName',body).value.trim().slice(0,40);
+    const status=$('#stStatus',body).value.trim().slice(0,80);
+    const bio=$('#stBio',body).value.trim().slice(0,600);
+    const nameFont=$('#stFont',body).value;
+    const nameColor=$('#stColor',body).value;
+    const links=body._getLinks();
+    const photo=body._getPhoto();
+    const newHandle=$('#stHandle',body).value.trim().toLowerCase();
+
+    const patch = {displayName:displayName||null, status, bio, nameFont, nameColor, gameLinks:links};
+    if(photo!==undefined) patch.photo = photo;
+
+    // handle change
+    if(newHandle && newHandle!==S.me.username){
+      if(!/^[a-z0-9._-]{2,24}$/.test(newHandle)){
+        toast('Handles use 2–24 lowercase letters, numbers, dot, underscore or hyphen.','bad',6000);
+        btn.disabled=false; return;
+      }
+      const taken = await getDoc(doc(db,'usernames',newHandle));
+      if(taken.exists() && taken.data().uid!==S.uid){
+        toast('That handle is already taken.','bad'); btn.disabled=false; return;
+      }
+      const email = auth.currentUser.email;
+      await setDoc(doc(db,'usernames',newHandle), {uid:S.uid, loginEmail:email});
+      if(S.me.username) await deleteDoc(doc(db,'usernames',S.me.username)).catch(()=>{});
+      patch.username = newHandle;
+      toast('Handle changed — log in with @'+newHandle+' from now on.','good',7000);
+      logLocal('social','Changed handle to @'+newHandle);
+    }
+
+    await updateDoc(doc(db,'users',S.uid), patch);
+    S.me={...S.me, ...patch};
+    paintMe(); renderDmList(); renderChatbar();
+    S.privacyFlags.delete('links'); S.privacyFlags.delete('photo');
+    scanProfilePrivacy();
+    toast('Saved.','good');
+    close();
+  }catch(e){
+    toast('Save failed: '+(e.code||e.message),'bad',6000);
+  }finally{ btn.disabled=false; }
+}
+
+/* client-side downscale + EXIF strip (12) */
+function shrinkImage(file, px){
+  return new Promise((res,rej)=>{
+    const fr=new FileReader();
+    fr.onerror=()=>rej(new Error('read'));
+    fr.onload=()=>{
+      const img=new Image();
+      img.onerror=()=>rej(new Error('decode'));
+      img.onload=()=>{
+        const c=document.createElement('canvas'); c.width=px; c.height=px;
+        const ctx=c.getContext('2d');
+        const side=Math.min(img.width, img.height);
+        ctx.drawImage(img, (img.width-side)/2, (img.height-side)/2, side, side, 0, 0, px, px);
+        let q=0.8, out=c.toDataURL('image/jpeg', q);
+        while(out.length>60000 && q>0.35){ q-=0.1; out=c.toDataURL('image/jpeg', q); }
+        res(out);
+      };
+      img.src=fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
 }
 </script>
 </body>
